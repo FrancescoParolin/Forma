@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FORMA — Cucina. Macro. Fitness.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { sans: ['Inter','sans-serif'], mono: ['Space Mono','monospace'] },
+        colors: {
+          lime: { 400:'#a3e635', 500:'#84cc16', 600:'#65a30d' },
+          dark: { 900:'#000', 800:'#111', 700:'#161617', 600:'#1c1c1e', 500:'#2c2c2e', 400:'#3a3a3c' }
+        }
+      }}
+    }
+  </script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#000;font-family:'Inter',sans-serif;color:#f5f5f7;-webkit-font-smoothing:antialiased}
+    ::-webkit-scrollbar{width:2px}
+    ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:99px}
+
+    /* Animations */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    .fade-up{animation:fadeUp .28s cubic-bezier(.16,1,.3,1) forwards}
+    @keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+    .d1{animation:blink 1.2s .0s infinite}
+    .d2{animation:blink 1.2s .2s infinite}
+    .d3{animation:blink 1.2s .4s infinite}
+    @keyframes tabIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .tab-enter{animation:tabIn .26s cubic-bezier(.16,1,.3,1) forwards}
+
+    /* Bottom Nav */
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 0;color:rgba(255,255,255,.3);transition:color .2s;font-family:'Inter',sans-serif;flex:1;position:relative}
+    .nav-item span{font-size:9px;letter-spacing:.4px;text-transform:uppercase;font-weight:600;transition:color .2s}
+    .nav-item svg{transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+    .nav-item.active{color:#a3e635}
+    .nav-item.active svg{transform:scale(1.12) translateY(-1px);filter:drop-shadow(0 0 6px rgba(163,230,53,.45))}
+    .nav-item::after{content:'';position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:0;height:2px;background:#a3e635;border-radius:0 0 3px 3px;transition:width .28s cubic-bezier(.4,0,.2,1)}
+    .nav-item.active::after{width:20px}
+
+    /* Cards — Apple dark */
+    .card{background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;transition:transform .2s,border-color .2s;cursor:pointer}
+    .card:hover{border-color:rgba(163,230,53,.2);transform:translateY(-1px)}
+
+    /* Input */
+    .chat-input{background:#111;border:1px solid rgba(255,255,255,.08);border-radius:18px;transition:border-color .2s,box-shadow .2s}
+    .chat-input:focus-within{border-color:rgba(163,230,53,.3);box-shadow:0 0 0 3px rgba(163,230,53,.05)}
+
+    /* Bubbles */
+    .bot-bubble{background:#111;border:1px solid rgba(255,255,255,.07);border-radius:18px;border-bottom-left-radius:4px}
+    .user-bubble{background:linear-gradient(135deg,#a3e635,#65a30d);border-radius:18px;border-bottom-right-radius:4px;color:#000;font-weight:600}
+
+    /* Chips */
+    .chip{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.45);padding:8px 16px;border-radius:99px;font-size:12px;cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;font-weight:500}
+    .chip:hover{border-color:rgba(163,230,53,.35);color:#a3e635;background:rgba(163,230,53,.05)}
+    .chip.sel{border-color:#a3e635;color:#a3e635;background:rgba(163,230,53,.08)}
+
+    /* Progress */
+    .bar-bg{background:rgba(255,255,255,.07);border-radius:99px;height:5px;overflow:hidden}
+    .bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#a3e635,#65a30d);transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+    /* Buttons */
+    .btn-primary{background:linear-gradient(135deg,#a3e635,#65a30d);color:#000;font-weight:700;border:none;border-radius:14px;padding:14px 20px;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;letter-spacing:.2px;transition:opacity .15s,transform .15s;width:100%}
+    .btn-primary:hover{opacity:.9;transform:scale(.99)}
+    .btn-primary:active{transform:scale(.97)}
+
+    /* Action buttons */
+    .act-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.4);padding:5px 12px;border-radius:8px;font-size:11px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;font-weight:500}
+    .act-btn:hover{border-color:rgba(163,230,53,.3);color:#a3e635}
+
+    /* Response */
+    .resp-title{font-size:16px;font-weight:700;color:#f5f5f7;letter-spacing:-.4px;margin:8px 0 5px;line-height:1.3}
+    .resp-meta{font-size:11px;color:rgba(255,255,255,.38);letter-spacing:.3px;font-family:'Space Mono',monospace}
+    .resp-bold{color:#f5f5f7;font-weight:600}
+    .resp-li{display:flex;align-items:flex-start;gap:9px;margin:4px 0;font-size:13.5px;color:rgba(255,255,255,.7)}
+    .resp-dot{width:4px;height:4px;border-radius:50%;background:#a3e635;flex-shrink:0;margin-top:7px}
+    .resp-step{display:flex;align-items:flex-start;gap:10px;margin:6px 0;font-size:13.5px;color:rgba(255,255,255,.78)}
+    .resp-num{min-width:22px;height:22px;border-radius:6px;background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.2);color:#a3e635;font-size:10px;font-family:'Space Mono',monospace;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;cursor:pointer;transition:all .15s}
+    .resp-num:hover{background:rgba(163,230,53,.2);border-color:rgba(163,230,53,.5)}
+    .resp-gap{height:10px}
+    .macro-table{border-collapse:collapse;width:100%;margin:10px 0;font-family:'Space Mono',monospace;font-size:11px}
+    .macro-table th{background:rgba(163,230,53,.08);color:#a3e635;padding:8px 10px;text-align:center;border:1px solid rgba(163,230,53,.12);letter-spacing:.5px;font-weight:400}
+    .macro-table td{color:rgba(255,255,255,.7);padding:7px 10px;text-align:center;border:1px solid rgba(255,255,255,.05)}
+    .macro-table tr:hover td{background:rgba(255,255,255,.03)}
+
+    /* Timer */
+    #timer-bar{position:fixed;bottom:88px;right:16px;z-index:60;background:#111;border:1px solid rgba(163,230,53,.3);border-radius:16px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+    .timer-display{font-size:22px;font-weight:700;color:#a3e635;font-family:'Space Mono',monospace;letter-spacing:2px;min-width:58px;text-align:center}
+    .timer-ctrl{width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);font-size:11px;transition:all .15s}
+    .timer-ctrl:hover{border-color:rgba(163,230,53,.4);color:#a3e635}
+
+    /* More menu */
+    .more-btn{display:flex;flex-direction:column;align-items:center;gap:7px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px 6px;cursor:pointer;color:rgba(255,255,255,.4);font-family:'Inter',sans-serif;transition:all .18s;width:100%}
+    .more-btn span{font-size:10px;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+    .more-btn:hover{border-color:rgba(163,230,53,.3);color:#a3e635;background:rgba(163,230,53,.04)}
+
+    /* Health rings */
+    .ring-track{fill:none;stroke-width:9}
+    .ring-fill{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)}
+    @keyframes ringIn{from{stroke-dashoffset:var(--full)}to{stroke-dashoffset:var(--offset)}}
+
+    /* Social feed */
+    .post-card{background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;overflow:hidden;transition:border-color .2s}
+    .post-card:hover{border-color:rgba(255,255,255,.13)}
+    .avatar-pill{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;font-family:'Inter',sans-serif;flex-shrink:0}
+    .like-btn{display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.3);font-size:12px;font-family:'Inter',sans-serif;font-weight:500;transition:color .15s;padding:0}
+    .like-btn.liked{color:#f87171}
+    .like-btn:hover{color:#f87171}
+    @keyframes heartPop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+    .heart-pop{animation:heartPop .3s cubic-bezier(.34,1.56,.64,1)}
+
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+
+    /* Onboarding */
+    #onboard-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:70;backdrop-filter:blur(12px)}
+    #onboard-modal{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:680px;background:#111;border-top:1px solid rgba(255,255,255,.08);border-radius:28px 28px 0 0;padding:32px 24px 52px;z-index:71}
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center">
+
+  <!-- HERO -->
+  <div class="w-full relative overflow-hidden" style="height:300px;max-width:680px">
+    <!-- Background photo -->
+    <div class="absolute inset-0" style="background-image:url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&q=85');background-size:cover;background-position:center 30%"></div>
+    <!-- Overlay base scuro per leggibilità -->
+    <div class="absolute inset-0" style="background:linear-gradient(170deg,rgba(8,11,8,.88) 0%,rgba(8,11,8,.5) 50%,rgba(8,11,8,.75) 100%)"></div>
+    <!-- Fade top separato per garantire leggibilità riga superiore -->
+    <div class="absolute top-0 left-0 right-0" style="height:80px;background:linear-gradient(to bottom,rgba(8,11,8,.7),transparent)"></div>
+    <!-- Bottom fade -->
+    <div class="absolute bottom-0 left-0 right-0" style="height:100px;background:linear-gradient(to bottom,transparent,#080b08)"></div>
+    <!-- Lime accent line top -->
+    <div class="absolute top-0 left-0 right-0" style="height:2px;background:linear-gradient(90deg,transparent 0%,#a3e635 40%,transparent 100%)"></div>
+
+    <!-- Contenuto hero -->
+    <div class="absolute inset-0 flex flex-col justify-between px-5 pt-6 pb-7">
+
+      <!-- RIGA TOP: greeting + badge obiettivo -->
+      <div class="flex items-center justify-between">
+        <p id="hero-greeting" style="color:rgba(255,255,255,.65);font-size:13px;font-weight:500;letter-spacing:.2px"></p>
+        <div id="hero-obj" style="display:none;background:rgba(163,230,53,.15);border:1px solid rgba(163,230,53,.4);border-radius:8px;padding:5px 11px">
+          <p id="hero-obj-txt" style="color:#a3e635;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace;white-space:nowrap"></p>
+        </div>
+      </div>
+
+      <!-- RIGA BOTTOM: titolo + streak -->
+      <div class="flex items-end justify-between gap-4">
+        <div style="flex:1;min-width:0">
+          <h1 style="font-size:62px;font-weight:700;color:#fff;letter-spacing:-3px;line-height:.9">FORMA</h1>
+          <p style="color:rgba(255,255,255,.3);font-size:11px;margin-top:10px;letter-spacing:2px;text-transform:uppercase">Cucina · Macro · Fitness</p>
+        </div>
+        <div id="hero-streak" style="display:none;background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.3);border-radius:12px;padding:10px 14px;text-align:center;flex-shrink:0">
+          <p id="streak-num" style="font-size:26px;font-weight:700;color:#a3e635;line-height:1;font-family:'Space Mono',monospace">0</p>
+          <p style="font-size:8px;color:rgba(163,230,53,.55);letter-spacing:1.5px;margin-top:3px;text-transform:uppercase">giorni</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="w-full flex flex-col flex-1" style="max-width:680px;padding-bottom:80px">
+
+    <!-- ── TAB CHAT ── -->
+    <div id="view-chat" class="flex flex-col flex-1">
+      <div id="chat" class="flex-1 overflow-y-auto px-4 py-5 flex flex-col gap-4" style="max-height:calc(100vh - 460px);min-height:180px">
+        <div id="welcome" class="flex flex-col gap-4">
+
+          <!-- Macro preview chips -->
+          <div class="card p-4 flex flex-col gap-3">
+            <p style="color:rgba(255,255,255,.38);font-size:11px;letter-spacing:1px;text-transform:uppercase">Obiettivo rapido</p>
+            <div class="flex gap-2 flex-wrap">
+              <button class="chip" onclick="invia('Ricetta alta proteina post allenamento, 40g proteine almeno, con macro')">Post-workout</button>
+              <button class="chip" onclick="invia('Colazione per chi vuole definizione muscolare, con macro complete')">Colazione fit</button>
+              <button class="chip" onclick="invia('Pranzo per massa muscolare, ricco di carboidrati e proteine, con macro')">Pranzo massa</button>
+              <button class="chip" onclick="invia('Cena leggera per definizione, poche calorie alta proteina, con macro')">Cena light</button>
+            </div>
+          </div>
+
+          <!-- Photo cards -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="relative rounded-2xl overflow-hidden cursor-pointer" style="height:110px;background-image:url('https://images.unsplash.com/photo-1547496502-affa22d38842?w=400&q=70');background-size:cover;background-position:center" onclick="openModal('Brunch Fit',['Con uova e avocado','Alta proteina','Vegetariano','Veloce — meno di 15 min'])">
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(8,11,8,.9),transparent)"></div>
+              <div class="absolute bottom-0 left-0 p-3">
+                <p class="font-bold text-sm" style="color:#a3e635">Brunch Fit</p>
+                <p style="color:rgba(255,255,255,.38);font-size:11px">alto in proteine</p>
+              </div>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden cursor-pointer" style="height:110px;background-image:url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&q=70');background-size:cover;background-position:center" onclick="openModal('Meal Prep',['Per la settimana — massa','Per la settimana — definizione','Solo 3 giorni','Con pollo e riso'])">
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(8,11,8,.9),transparent)"></div>
+              <div class="absolute bottom-0 left-0 p-3">
+                <p class="font-bold text-sm" style="color:#a3e635">Meal Prep</p>
+                <p style="color:rgba(255,255,255,.38);font-size:11px">5 giorni pronti</p>
+              </div>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden cursor-pointer" style="height:110px;background-image:url('https://images.unsplash.com/photo-1505576399279-565b52d4ac71?w=400&q=70');background-size:cover;background-position:center" onclick="openModal('Pre-Workout',['1 ora prima — classico','30 minuti prima — leggero','Mattina presto','Pomeriggio'])">
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(8,11,8,.9),transparent)"></div>
+              <div class="absolute bottom-0 left-0 p-3">
+                <p class="font-bold text-sm" style="color:#a3e635">Pre-Workout</p>
+                <p style="color:rgba(255,255,255,.38);font-size:11px">energia esplosiva</p>
+              </div>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden cursor-pointer" style="height:110px;background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&q=70');background-size:cover;background-position:center" onclick="openModal('Plant Protein',['Pranzo veloce','Cena abbondante','Post allenamento','Colazione proteica'])">
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(8,11,8,.9),transparent)"></div>
+              <div class="absolute bottom-0 left-0 p-3">
+                <p class="font-bold text-sm" style="color:#a3e635">Plant Protein</p>
+                <p style="color:rgba(255,255,255,.38);font-size:11px">vegetariano fit</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input -->
+      <div class="px-4 pb-5 pt-2">
+        <div class="chat-input flex gap-3 px-4 py-3">
+          <textarea id="input" rows="1" placeholder="Chiedi una ricetta, calcola i tuoi macro, meal prep..."
+            class="flex-1 outline-none resize-none font-sans text-sm leading-relaxed"
+            style="background:transparent;color:#f5f5f7;max-height:120px"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();inviaForm()}"
+            oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+          <button id="send" onclick="inviaForm()" style="background:linear-gradient(135deg,#a3e635,#65a30d);width:36px;height:36px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:flex-end;box-shadow:0 4px 12px rgba(163,230,53,.3)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#080b08" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+        <div class="flex justify-between mt-2 px-1">
+          <span style="font-size:11px;color:rgba(255,255,255,.2)">↵ Invia · Shift+↵ nuova riga</span>
+          <button onclick="resetChat()" style="font-size:11px;color:rgba(255,255,255,.2);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif" class="hover:text-lime-400 transition-colors">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB MACRO CALCULATOR ── -->
+    <div id="view-macro" class="hidden px-4 py-5 flex flex-col gap-4">
+      <div class="card p-5 flex flex-col gap-4">
+        <div>
+          <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">CALCOLA IL TUO TDEE</p>
+          <p style="color:rgba(255,255,255,.38);font-size:13px;margin-top:4px">Inserisci i tuoi dati per ottenere fabbisogno calorico e macro personalizzati</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px">Peso (kg)</label>
+            <input id="m-peso" type="number" placeholder="75" class="w-full mt-1 px-3 py-2 rounded-lg text-sm outline-none" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;font-family:'Space Mono',monospace">
+          </div>
+          <div>
+            <label style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px">Altezza (cm)</label>
+            <input id="m-altezza" type="number" placeholder="175" class="w-full mt-1 px-3 py-2 rounded-lg text-sm outline-none" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;font-family:'Space Mono',monospace">
+          </div>
+          <div>
+            <label style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px">Età</label>
+            <input id="m-eta" type="number" placeholder="28" class="w-full mt-1 px-3 py-2 rounded-lg text-sm outline-none" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;font-family:'Space Mono',monospace">
+          </div>
+          <div>
+            <label style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px">Sesso</label>
+            <select id="m-sesso" class="w-full mt-1 px-3 py-2 rounded-lg text-sm outline-none" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;font-family:'Inter',sans-serif">
+              <option value="M">Maschio</option>
+              <option value="F">Femmina</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px">Attività fisica</label>
+          <div class="flex flex-col gap-2 mt-2">
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="attivita" value="sedentario" class="accent-lime-500"><span style="font-size:13px;color:rgba(255,255,255,.35)">Sedentario (ufficio, no sport)</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="attivita" value="leggero" checked class="accent-lime-500"><span style="font-size:13px;color:rgba(255,255,255,.35)">Leggero (1-3 allenamenti/sett)</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="attivita" value="moderato" class="accent-lime-500"><span style="font-size:13px;color:rgba(255,255,255,.35)">Moderato (3-5 allenamenti/sett)</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="attivita" value="intenso" class="accent-lime-500"><span style="font-size:13px;color:rgba(255,255,255,.35)">Intenso (6-7 allenamenti/sett)</span></label>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px">Obiettivo</label>
+          <div class="flex gap-2 mt-2 flex-wrap">
+            <button class="chip sel" id="obj-massa" onclick="selObiettivo('massa')">Massa</button>
+            <button class="chip" id="obj-definizione" onclick="selObiettivo('definizione')">Definizione</button>
+            <button class="chip" id="obj-mantenimento" onclick="selObiettivo('mantenimento')">Mantenimento</button>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="calcolaMacro()">CALCOLA MACRO</button>
+      </div>
+
+      <!-- Risultati -->
+      <div id="macro-result" class="hidden card p-5 flex flex-col gap-4">
+        <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">I TUOI MACRO</p>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-3 rounded-xl text-center" style="background:#000;border:1px solid rgba(255,255,255,.08)">
+            <p id="r-kcal" style="font-size:24px;font-weight:700;color:#a3e635;font-family:'Space Mono',monospace">—</p>
+            <p style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px">kcal/giorno</p>
+          </div>
+          <div class="p-3 rounded-xl text-center" style="background:#000;border:1px solid rgba(255,255,255,.08)">
+            <p id="r-prot" style="font-size:24px;font-weight:700;color:#a3e635;font-family:'Space Mono',monospace">—</p>
+            <p style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px">g proteine</p>
+          </div>
+          <div class="p-3 rounded-xl text-center" style="background:#000;border:1px solid rgba(255,255,255,.08)">
+            <p id="r-carb" style="font-size:24px;font-weight:700;color:#a3e635;font-family:'Space Mono',monospace">—</p>
+            <p style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px">g carboidrati</p>
+          </div>
+          <div class="p-3 rounded-xl text-center" style="background:#000;border:1px solid rgba(255,255,255,.08)">
+            <p id="r-grassi" style="font-size:24px;font-weight:700;color:#a3e635;font-family:'Space Mono',monospace">—</p>
+            <p style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px">g grassi</p>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="chiediRicetteMacro()">Mostrami ricette per questi macro</button>
+      </div>
+    </div>
+
+    <!-- ── TAB FRIGO ── -->
+    <div id="view-frigo" class="hidden px-4 py-5 flex flex-col gap-4">
+      <div class="card p-5 flex flex-col gap-4">
+        <div>
+          <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">SCANNER FRIGO</p>
+          <p style="color:rgba(255,255,255,.38);font-size:13px;margin-top:4px">Elenca ingredienti → ricevo ricette ottimizzate con macro.</p>
+        </div>
+        <textarea id="frigo-input" rows="3" placeholder="es: petto di pollo, riso, zucchine, uova, ricotta..."
+          class="w-full px-3 py-3 rounded-xl text-sm outline-none resize-none"
+          style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;font-family:'Inter',sans-serif"></textarea>
+        <div>
+          <p style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Obiettivo pasto</p>
+          <div class="flex gap-2 flex-wrap">
+            <button class="chip sel" id="fg-massa" onclick="selFrigoObj('massa')">Massa</button>
+            <button class="chip" id="fg-definizione" onclick="selFrigoObj('definizione')">Definizione</button>
+            <button class="chip" id="fg-qualsiasi" onclick="selFrigoObj('qualsiasi')">Qualsiasi</button>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:11px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Tempo</p>
+          <div class="flex gap-2">
+            <button class="chip" id="ft-15" onclick="selFrigoTempo('15')">15 min</button>
+            <button class="chip" id="ft-30" onclick="selFrigoTempo('30')">30 min</button>
+            <button class="chip" id="ft-60" onclick="selFrigoTempo('60')">1 ora</button>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="usaFrigo()">ANALIZZA FRIGO</button>
+      </div>
+    </div>
+
+    <!-- ── TAB GYM ── -->
+    <div id="view-gym" class="hidden px-4 py-5 flex flex-col gap-4">
+      <div class="card p-4">
+        <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:12px">— PASTI STRATEGICI —</p>
+        <div class="flex flex-col gap-3">
+          <button class="card p-4 text-left" onclick="setTab('chat');invia('Dammi 3 opzioni di pasto pre-allenamento per la mattina, ottimizzati per performance. Con macro.')">
+            <div class="flex items-center gap-3">
+              <div style="width:28px;height:28px;border:1px solid #a3e63540;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><div style="width:8px;height:8px;background:#a3e635;border-radius:50%"></div></div>
+              <div><p class="font-bold text-sm" style="color:#f5f5f7">Pre-Workout</p><p style="color:rgba(255,255,255,.38);font-size:12px">Carboidrati + proteine moderate</p></div>
+            </div>
+          </button>
+          <button class="card p-4 text-left" onclick="setTab('chat');invia('Ricetta post-allenamento ideale: 40g proteine, carboidrati medi per recupero muscolare. Con macro.')">
+            <div class="flex items-center gap-3">
+              <div style="width:28px;height:28px;border:1px solid #a3e63540;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><div style="width:8px;height:8px;background:#a3e635;border-radius:50%"></div></div>
+              <div><p class="font-bold text-sm" style="color:#f5f5f7">Post-Workout</p><p style="color:rgba(255,255,255,.38);font-size:12px">Proteine alte + carboidrati</p></div>
+            </div>
+          </button>
+          <button class="card p-4 text-left" onclick="setTab('chat');invia('Piano pasti completo per una giornata di allenamento: colazione, pranzo, spuntino, post-workout, cena. Obiettivo massa. Con macro per ogni pasto.')">
+            <div class="flex items-center gap-3">
+              <div style="width:28px;height:28px;border:1px solid #a3e63540;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><div style="width:8px;height:8px;background:#a3e635;border-radius:50%"></div></div>
+              <div><p class="font-bold text-sm" style="color:#f5f5f7">Piano giornaliero</p><p style="color:rgba(255,255,255,.38);font-size:12px">5 pasti ottimizzati</p></div>
+            </div>
+          </button>
+          <button class="card p-4 text-left" onclick="setTab('chat');invia('Meal prep domenicale per 5 giorni di allenamento: cosa preparare, come conservare, macro giornalieri totali.')">
+            <div class="flex items-center gap-3">
+              <div style="width:28px;height:28px;border:1px solid #a3e63540;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><div style="width:8px;height:8px;background:#a3e635;border-radius:50%"></div></div>
+              <div><p class="font-bold text-sm" style="color:#f5f5f7">Meal Prep Week</p><p style="color:rgba(255,255,255,.38);font-size:12px">5 giorni preparati domenica</p></div>
+            </div>
+          </button>
+          <button class="card p-4 text-left" onclick="setTab('chat');invia('Lista spesa settimanale per sportivo che si allena 4 volte a settimana, obiettivo massa muscolare, budget 50 euro.')">
+            <div class="flex items-center gap-3">
+              <div style="width:28px;height:28px;border:1px solid #a3e63540;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><div style="width:8px;height:8px;background:#a3e635;border-radius:50%"></div></div>
+              <div><p class="font-bold text-sm" style="color:#f5f5f7">Lista Spesa Fit</p><p style="color:rgba(255,255,255,.38);font-size:12px">Spesa ottimizzata per atleti</p></div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB OGGI ── -->
+    <div id="view-oggi" class="hidden px-4 py-5 flex flex-col gap-4">
+      <div class="card p-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">— DIARIO DI OGGI —</p>
+            <p id="oggi-data" style="color:rgba(255,255,255,.38);font-size:12px;margin-top:3px"></p>
+          </div>
+          <button onclick="resetDiario()" style="font-size:10px;color:rgba(255,255,255,.2);background:none;border:none;cursor:pointer;font-family:'Space Mono',monospace" onmouseover="this.style.color='#6a8a6a'" onmouseout="this.style.color='#2d3d2d'">RESET</button>
+        </div>
+        <!-- Barre macro -->
+        <div class="flex flex-col gap-3" id="macro-bars">
+          <div>
+            <div class="flex justify-between mb-1"><span style="font-size:11px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">KCAL</span><span id="bar-kcal-txt" style="font-size:11px;color:#a3e635;font-family:'Space Mono',monospace">0 / —</span></div>
+            <div class="bar-bg"><div id="bar-kcal" class="bar-fill" style="width:0%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1"><span style="font-size:11px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">PROTEINE</span><span id="bar-prot-txt" style="font-size:11px;color:#a3e635;font-family:'Space Mono',monospace">0g / —</span></div>
+            <div class="bar-bg"><div id="bar-prot" class="bar-fill" style="width:0%;background:linear-gradient(90deg,#60a5fa,#3b82f6)"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1"><span style="font-size:11px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">CARBOIDRATI</span><span id="bar-carb-txt" style="font-size:11px;color:#a3e635;font-family:'Space Mono',monospace">0g / —</span></div>
+            <div class="bar-bg"><div id="bar-carb" class="bar-fill" style="width:0%;background:linear-gradient(90deg,#f59e0b,#d97706)"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1"><span style="font-size:11px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">GRASSI</span><span id="bar-grassi-txt" style="font-size:11px;color:#a3e635;font-family:'Space Mono',monospace">0g / —</span></div>
+            <div class="bar-bg"><div id="bar-grassi" class="bar-fill" style="width:0%;background:linear-gradient(90deg,#f87171,#ef4444)"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aggiungi pasto -->
+      <div class="card p-4 flex flex-col gap-3">
+        <p style="font-size:11px;color:rgba(255,255,255,.38);letter-spacing:1px;text-transform:uppercase;font-family:'Space Mono',monospace">Aggiungi pasto</p>
+        <input id="d-nome" placeholder="Nome pasto (es. Pasta al pollo)" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 12px;border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;width:100%">
+        <div class="grid grid-cols-4 gap-2">
+          <div><label style="font-size:9px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">KCAL</label><input id="d-kcal" type="number" placeholder="520" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#a3e635;padding:8px;border-radius:8px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;text-align:center"></div>
+          <div><label style="font-size:9px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">PROT g</label><input id="d-prot" type="number" placeholder="42" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#60a5fa;padding:8px;border-radius:8px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;text-align:center"></div>
+          <div><label style="font-size:9px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">CARB g</label><input id="d-carb" type="number" placeholder="58" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f59e0b;padding:8px;border-radius:8px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;text-align:center"></div>
+          <div><label style="font-size:9px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">GRASS g</label><input id="d-grassi" type="number" placeholder="10" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f87171;padding:8px;border-radius:8px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;text-align:center"></div>
+        </div>
+        <button class="btn-primary" onclick="aggiungiPasto()">+ AGGIUNGI AL DIARIO</button>
+      </div>
+
+      <!-- Acqua tracker -->
+      <div class="card p-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <p style="font-size:11px;color:rgba(255,255,255,.38);letter-spacing:1px;text-transform:uppercase;font-family:'Space Mono',monospace">Acqua oggi</p>
+          <span id="acqua-txt" style="font-size:11px;color:#a3e635;font-family:'Space Mono',monospace">0 / 8</span>
+        </div>
+        <div id="acqua-glasses" class="flex gap-1 justify-between"></div>
+        <p style="font-size:10px;color:rgba(255,255,255,.2);font-family:'Space Mono',monospace">Tocca un bicchiere per segnarlo</p>
+      </div>
+
+      <!-- Lista pasti -->
+      <div id="lista-pasti" class="flex flex-col gap-2"></div>
+    </div>
+
+    <!-- ── TAB PROFILO ── -->
+    <div id="view-profilo" class="hidden px-4 py-5 flex flex-col gap-4">
+      <div class="card p-5 flex flex-col gap-4">
+        <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">— IL TUO PROFILO —</p>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="col-span-2"><label style="font-size:10px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">NOME</label><input id="prof-nome" placeholder="Il tuo nome" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 12px;border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;margin-top:4px"></div>
+          <div><label style="font-size:10px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">PESO (kg)</label><input id="prof-peso" type="number" placeholder="75" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 12px;border-radius:10px;font-size:14px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:4px"></div>
+          <div><label style="font-size:10px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">ALTEZZA (cm)</label><input id="prof-altezza" type="number" placeholder="175" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 12px;border-radius:10px;font-size:14px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:4px"></div>
+          <div><label style="font-size:10px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">ETÀ</label><input id="prof-eta" type="number" placeholder="28" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 12px;border-radius:10px;font-size:14px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:4px"></div>
+          <div><label style="font-size:10px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">SESSO</label><select id="prof-sesso" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 12px;border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;margin-top:4px"><option value="M">Maschio</option><option value="F">Femmina</option></select></div>
+        </div>
+        <div>
+          <label style="font-size:10px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">OBIETTIVO</label>
+          <div class="flex gap-2 mt-2">
+            <button class="chip sel" id="prof-massa" onclick="selProfObj('massa')">Massa</button>
+            <button class="chip" id="prof-definizione" onclick="selProfObj('definizione')">Definizione</button>
+            <button class="chip" id="prof-mantenimento" onclick="selProfObj('mantenimento')">Mantenimento</button>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:10px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">ATTIVITÀ</label>
+          <div class="flex flex-col gap-2 mt-2">
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="prof-attivita" value="sedentario" class="accent-lime-500"><span style="font-size:13px;color:rgba(255,255,255,.35)">Sedentario</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="prof-attivita" value="leggero" checked class="accent-lime-500"><span style="font-size:13px;color:rgba(255,255,255,.35)">1–3 allenamenti/sett</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="prof-attivita" value="moderato" class="accent-lime-500"><span style="font-size:13px;color:rgba(255,255,255,.35)">3–5 allenamenti/sett</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="prof-attivita" value="intenso" class="accent-lime-500"><span style="font-size:13px;color:rgba(255,255,255,.35)">6–7 allenamenti/sett</span></label>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:10px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">RESTRIZIONI ALIMENTARI</label>
+          <input id="prof-restrizioni" placeholder="es. senza lattosio, vegetariano, senza glutine..." style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 12px;border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;width:100%;margin-top:4px">
+        </div>
+        <button class="btn-primary" onclick="salvaProfilo()">SALVA PROFILO</button>
+        <div id="prof-saved" style="display:none;text-align:center;font-size:12px;color:#a3e635;font-family:'Space Mono',monospace">Profilo salvato — l'AI ora ti conosce.</div>
+      </div>
+      <!-- Macro calcolati dal profilo -->
+      <div id="prof-macro-box" class="hidden card p-4 flex flex-col gap-3">
+        <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">TARGET GIORNALIERI</p>
+        <div class="grid grid-cols-4 gap-2 text-center">
+          <div class="p-3 rounded-xl" style="background:#000;border:1px solid rgba(255,255,255,.08)"><p id="prof-r-kcal" style="font-size:18px;font-weight:700;color:#a3e635;font-family:'Space Mono',monospace">—</p><p style="font-size:9px;color:rgba(255,255,255,.38)">kcal</p></div>
+          <div class="p-3 rounded-xl" style="background:#000;border:1px solid rgba(255,255,255,.08)"><p id="prof-r-prot" style="font-size:18px;font-weight:700;color:#60a5fa;font-family:'Space Mono',monospace">—</p><p style="font-size:9px;color:rgba(255,255,255,.38)">prot</p></div>
+          <div class="p-3 rounded-xl" style="background:#000;border:1px solid rgba(255,255,255,.08)"><p id="prof-r-carb" style="font-size:18px;font-weight:700;color:#f59e0b;font-family:'Space Mono',monospace">—</p><p style="font-size:9px;color:rgba(255,255,255,.38)">carb</p></div>
+          <div class="p-3 rounded-xl" style="background:#000;border:1px solid rgba(255,255,255,.08)"><p id="prof-r-grassi" style="font-size:18px;font-weight:700;color:#f87171;font-family:'Space Mono',monospace">—</p><p style="font-size:9px;color:rgba(255,255,255,.38)">grassi</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB PIANO ── -->
+    <div id="view-piano" class="hidden px-4 py-5 flex flex-col gap-4">
+
+      <!-- Header + generate -->
+      <div class="card p-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">— PIANO SETTIMANALE —</p>
+            <p style="color:rgba(255,255,255,.38);font-size:12px;margin-top:3px">Organizza i pasti di tutta la settimana</p>
+          </div>
+          <button onclick="generaPiano()" style="background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.25);color:#a3e635;padding:8px 14px;border-radius:10px;font-size:11px;font-family:'Space Mono',monospace;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all .15s" onmouseover="this.style.background='rgba(163,230,53,.2)'" onmouseout="this.style.background='rgba(163,230,53,.1)'">AI GENERA</button>
+        </div>
+
+        <!-- Obiettivo + kcal target -->
+        <div class="flex gap-2 flex-wrap items-center">
+          <button class="chip sel" id="p-obj-massa" onclick="selPianoObj('massa')">Massa</button>
+          <button class="chip" id="p-obj-definizione" onclick="selPianoObj('definizione')">Definizione</button>
+          <button class="chip" id="p-obj-mantenimento" onclick="selPianoObj('mantenimento')">Mantenimento</button>
+          <input id="p-kcal" type="number" placeholder="kcal/giorno" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#a3e635;padding:7px 12px;border-radius:99px;font-size:12px;font-family:'Space Mono',monospace;outline:none;width:130px">
+        </div>
+      </div>
+
+      <!-- Griglia settimanale -->
+      <div id="piano-grid" class="flex flex-col gap-2">
+        <!-- generato da JS -->
+      </div>
+
+      <!-- Lista spesa -->
+      <button onclick="generaListaSpesa()" class="btn-primary">GENERA LISTA SPESA</button>
+      <!-- Reset -->
+      <button onclick="resetPiano()" style="background:none;border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.2);padding:10px;border-radius:10px;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;transition:color .15s" onmouseover="this.style.color='#6a8a6a'" onmouseout="this.style.color='#2d3d2d'">Azzera piano</button>
+    </div>
+
+    <!-- ── TAB SALVATE ── -->
+    <div id="view-salvate" class="hidden px-4 py-5">
+      <div class="card p-5">
+        <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:4px">RICETTE SALVATE</p>
+        <p style="color:rgba(255,255,255,.38);font-size:12px;margin-bottom:16px">Premi "salva" su una risposta per archiviarla.</p>
+        <div id="salvate-list" class="flex flex-col gap-3"></div>
+        <div id="salvate-empty" class="text-center py-8" style="color:rgba(255,255,255,.2);font-size:13px">Nessuna ricetta salvata.</div>
+      </div>
+    </div>
+
+    <!-- ── TAB SALUTE ── -->
+    <div id="view-salute" class="hidden px-4 py-5 flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">SALUTE</p>
+          <p style="color:rgba(255,255,255,.38);font-size:12px;margin-top:2px">Bracciale connesso</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;background:rgba(163,230,53,.07);border:1px solid rgba(163,230,53,.18);border-radius:99px;padding:5px 12px">
+          <span style="width:7px;height:7px;background:#a3e635;border-radius:50%;animation:pulse-dot 2s infinite"></span>
+          <span style="font-size:10px;color:#a3e635;font-family:'Space Mono',monospace;letter-spacing:1px">CONNESSO</span>
+        </div>
+      </div>
+
+      <!-- Rings -->
+      <div class="card p-5 flex flex-col items-center gap-4">
+        <div style="position:relative;width:200px;height:200px">
+          <svg viewBox="0 0 200 200" style="position:absolute;inset:0;transform:rotate(-90deg)">
+            <circle cx="100" cy="100" r="85" class="ring-track" stroke="rgba(163,230,53,.1)"/>
+            <circle cx="100" cy="100" r="85" class="ring-fill" stroke="#a3e635" id="ring-passi" style="stroke-dasharray:534;stroke-dashoffset:534"/>
+            <circle cx="100" cy="100" r="69" class="ring-track" stroke="rgba(96,165,250,.1)"/>
+            <circle cx="100" cy="100" r="69" class="ring-fill" stroke="#60a5fa" id="ring-cal" style="stroke-dasharray:433;stroke-dashoffset:433"/>
+            <circle cx="100" cy="100" r="53" class="ring-track" stroke="rgba(248,113,113,.1)"/>
+            <circle cx="100" cy="100" r="53" class="ring-fill" stroke="#f87171" id="ring-min" style="stroke-dasharray:333;stroke-dashoffset:333"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <p id="sal-passi-big" style="font-size:30px;font-weight:800;color:#f5f5f7;letter-spacing:-1.5px;line-height:1;font-family:'Inter',sans-serif">0</p>
+            <p style="font-size:10px;color:rgba(255,255,255,.35);letter-spacing:1px;text-transform:uppercase;margin-top:3px">passi</p>
+          </div>
+        </div>
+        <div class="flex gap-5">
+          <div style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;background:#a3e635;border-radius:50%"></span><span style="font-size:11px;color:rgba(255,255,255,.4)">Passi</span></div>
+          <div style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;background:#60a5fa;border-radius:50%"></span><span style="font-size:11px;color:rgba(255,255,255,.4)">Calorie</span></div>
+          <div style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;background:#f87171;border-radius:50%"></span><span style="font-size:11px;color:rgba(255,255,255,.4)">Min attivi</span></div>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="card p-4"><p style="font-size:9px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace">Distanza</p><p id="sal-km" style="font-size:28px;font-weight:700;color:#f5f5f7;letter-spacing:-1px;margin-top:6px;font-family:'Space Mono',monospace">0.0</p><p style="font-size:10px;color:rgba(255,255,255,.28);margin-top:2px">km</p></div>
+        <div class="card p-4"><p style="font-size:9px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace">Calorie</p><p id="sal-cal" style="font-size:28px;font-weight:700;color:#60a5fa;letter-spacing:-1px;margin-top:6px;font-family:'Space Mono',monospace">0</p><p style="font-size:10px;color:rgba(255,255,255,.28);margin-top:2px">kcal attive</p></div>
+        <div class="card p-4"><p style="font-size:9px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace">Salita</p><p id="sal-up" style="font-size:28px;font-weight:700;color:#f5f5f7;letter-spacing:-1px;margin-top:6px;font-family:'Space Mono',monospace">0</p><p style="font-size:10px;color:rgba(255,255,255,.28);margin-top:2px">metri ↑</p></div>
+        <div class="card p-4"><p style="font-size:9px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace">Discesa</p><p id="sal-down" style="font-size:28px;font-weight:700;color:#f5f5f7;letter-spacing:-1px;margin-top:6px;font-family:'Space Mono',monospace">0</p><p style="font-size:10px;color:rgba(255,255,255,.28);margin-top:2px">metri ↓</p></div>
+        <div class="card p-4"><p style="font-size:9px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace">Freq. cardiaca</p><p id="sal-fc" style="font-size:28px;font-weight:700;color:#f87171;letter-spacing:-1px;margin-top:6px;font-family:'Space Mono',monospace">—</p><p style="font-size:10px;color:rgba(255,255,255,.28);margin-top:2px">bpm media</p></div>
+        <div class="card p-4"><p style="font-size:9px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace">Sonno</p><p id="sal-sonno" style="font-size:28px;font-weight:700;color:#a78bfa;letter-spacing:-1px;margin-top:6px;font-family:'Space Mono',monospace">—</p><p style="font-size:10px;color:rgba(255,255,255,.28);margin-top:2px">ore</p></div>
+      </div>
+
+      <!-- Input -->
+      <div class="card p-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <p style="font-size:11px;color:rgba(255,255,255,.38);letter-spacing:1px;text-transform:uppercase;font-family:'Space Mono',monospace">Inserisci dati</p>
+          <button onclick="simulaGiornata()" style="font-size:10px;color:#a3e635;background:rgba(163,230,53,.08);border:1px solid rgba(163,230,53,.2);border-radius:99px;padding:4px 14px;cursor:pointer;font-family:'Space Mono',monospace;letter-spacing:.5px;transition:all .15s" onmouseover="this.style.background='rgba(163,230,53,.15)'" onmouseout="this.style.background='rgba(163,230,53,.08)'">SIMULA</button>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div><label style="font-size:9px;color:rgba(255,255,255,.32);font-family:'Space Mono',monospace">PASSI</label><input id="sal-in-passi" type="number" placeholder="8000" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:8px 10px;border-radius:10px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:4px"></div>
+          <div><label style="font-size:9px;color:rgba(255,255,255,.32);font-family:'Space Mono',monospace">CAL</label><input id="sal-in-cal" type="number" placeholder="420" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#60a5fa;padding:8px 10px;border-radius:10px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:4px"></div>
+          <div><label style="font-size:9px;color:rgba(255,255,255,.32);font-family:'Space Mono',monospace">FC bpm</label><input id="sal-in-fc" type="number" placeholder="72" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f87171;padding:8px 10px;border-radius:10px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:4px"></div>
+          <div><label style="font-size:9px;color:rgba(255,255,255,.32);font-family:'Space Mono',monospace">↑ m</label><input id="sal-in-up" type="number" placeholder="120" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:8px 10px;border-radius:10px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:4px"></div>
+          <div><label style="font-size:9px;color:rgba(255,255,255,.32);font-family:'Space Mono',monospace">↓ m</label><input id="sal-in-down" type="number" placeholder="110" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:8px 10px;border-radius:10px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:4px"></div>
+          <div><label style="font-size:9px;color:rgba(255,255,255,.32);font-family:'Space Mono',monospace">SONNO h</label><input id="sal-in-sonno" type="number" step="0.5" placeholder="7.5" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#a78bfa;padding:8px 10px;border-radius:10px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:4px"></div>
+        </div>
+        <button class="btn-primary" onclick="salvaDatiSalute()">SALVA DATI</button>
+      </div>
+      <button class="card p-4 text-left w-full" onclick="setTab('chat');invia('Analizza questi miei dati di oggi: '+getSaluteStr()+'. Dammi consigli pratici su recovery, performance e ottimizzazione.')">
+        <p style="font-size:12px;color:#a3e635;font-family:'Space Mono',monospace;letter-spacing:.5px">Analizza con AI →</p>
+        <p style="font-size:11px;color:rgba(255,255,255,.32);margin-top:4px">Consigli personalizzati sui tuoi dati</p>
+      </button>
+    </div>
+
+    <!-- ── TAB SOCIAL ── -->
+    <div id="view-social" class="hidden px-4 py-5 flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">COMMUNITY</p>
+          <p style="color:rgba(255,255,255,.38);font-size:12px;margin-top:2px">Condividi il tuo percorso</p>
+        </div>
+        <button onclick="openNewPost()" style="background:rgba(163,230,53,.08);border:1px solid rgba(163,230,53,.2);color:#a3e635;padding:7px 16px;border-radius:99px;font-size:11px;font-family:'Space Mono',monospace;letter-spacing:.5px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='rgba(163,230,53,.15)'" onmouseout="this.style.background='rgba(163,230,53,.08)'">+ Condividi</button>
+      </div>
+      <div id="social-feed" class="flex flex-col gap-3"></div>
+    </div>
+
+  </div><!-- end main -->
+
+  <!-- NEW POST MODAL -->
+  <div id="newpost-overlay" onclick="closeNewPost()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;backdrop-filter:blur(6px)"></div>
+  <div id="newpost-modal" style="display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:680px;background:#111;border-top:1px solid rgba(255,255,255,.08);border-radius:24px 24px 0 0;padding:24px 20px 40px;z-index:51">
+    <div style="width:36px;height:3px;background:rgba(255,255,255,.15);border-radius:99px;margin:0 auto 20px"></div>
+    <p style="font-size:13px;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:16px">NUOVO POST</p>
+    <div class="flex gap-2 flex-wrap mb-4">
+      <button class="chip sel" id="pt-meal" onclick="selPostTipo('meal')">Pasto</button>
+      <button class="chip" id="pt-workout" onclick="selPostTipo('workout')">Allenamento</button>
+      <button class="chip" id="pt-result" onclick="selPostTipo('result')">Risultato</button>
+      <button class="chip" id="pt-altro" onclick="selPostTipo('altro')">Altro</button>
+    </div>
+    <textarea id="newpost-txt" rows="3" placeholder="Racconta il tuo momento..." style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:14px;border-radius:14px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;resize:none;margin-bottom:14px;line-height:1.5"></textarea>
+    <button class="btn-primary" onclick="pubblicaPost()">PUBBLICA</button>
+  </div>
+
+  <!-- TIMER BAR -->
+  <div id="timer-bar" style="display:none">
+    <div class="flex flex-col items-center">
+      <p id="timer-label" style="font-size:9px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace;letter-spacing:1px;margin-bottom:2px">TIMER</p>
+      <p id="timer-display" class="timer-display">00:00</p>
+    </div>
+    <div class="flex gap-2">
+      <button class="timer-ctrl" id="timer-play" onclick="toggleTimer()">&#9654;</button>
+      <button class="timer-ctrl" onclick="stopTimer()">&#9632;</button>
+    </div>
+  </div>
+
+  <!-- TIMER PROMPT -->
+  <div id="timer-prompt-overlay" onclick="closeTimerPrompt()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:65"></div>
+  <div id="timer-prompt" style="display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:680px;background:#111;border-top:1px solid #1a221a;border-radius:20px 20px 0 0;padding:24px 20px 40px;z-index:66">
+    <div style="width:36px;height:3px;background:#2d3d2d;border-radius:99px;margin:0 auto 18px"></div>
+    <p style="font-size:11px;color:rgba(255,255,255,.38);letter-spacing:2px;font-family:'Space Mono',monospace;margin-bottom:16px">TIMER COTTURA</p>
+    <div class="flex gap-2 flex-wrap" style="margin-bottom:16px">
+      <button class="chip" onclick="avviaTimerDa(1)">1 min</button>
+      <button class="chip" onclick="avviaTimerDa(3)">3 min</button>
+      <button class="chip" onclick="avviaTimerDa(5)">5 min</button>
+      <button class="chip" onclick="avviaTimerDa(10)">10 min</button>
+      <button class="chip" onclick="avviaTimerDa(15)">15 min</button>
+      <button class="chip" onclick="avviaTimerDa(20)">20 min</button>
+      <button class="chip" onclick="avviaTimerDa(30)">30 min</button>
+    </div>
+    <div class="flex gap-2">
+      <input id="timer-custom" type="number" placeholder="Minuti personalizzati" style="flex:1;background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 14px;border-radius:10px;font-size:14px;font-family:'Space Mono',monospace;outline:none" onkeydown="if(event.key==='Enter')avviaTimerCustom()">
+      <button onclick="avviaTimerCustom()" style="background:linear-gradient(135deg,#a3e635,#65a30d);color:#080b08;font-weight:700;border:none;border-radius:10px;padding:10px 20px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px">GO</button>
+    </div>
+  </div>
+
+  <!-- ONBOARDING -->
+  <div id="onboard-overlay" style="display:none"></div>
+  <div id="onboard-modal" style="display:none">
+    <div style="width:36px;height:3px;background:#2d3d2d;border-radius:99px;margin:0 auto 28px"></div>
+    <div id="onboard-step-1">
+      <p style="color:#a3e635;font-size:10px;letter-spacing:2px;font-family:'Space Mono',monospace;margin-bottom:8px">BENVENUTO</p>
+      <p style="font-size:24px;font-weight:700;color:#f5f5f7;letter-spacing:-.5px;margin-bottom:28px;line-height:1.1">Come ti chiami?</p>
+      <input id="ob-nome" placeholder="Il tuo nome" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:14px 16px;border-radius:14px;font-size:16px;font-family:'Inter',sans-serif;outline:none;width:100%;margin-bottom:16px" onkeydown="if(event.key==='Enter')nextOnboard(2)">
+      <button class="btn-primary" onclick="nextOnboard(2)">Avanti</button>
+      <button onclick="skipOnboard()" style="display:block;width:100%;margin-top:10px;background:none;border:none;color:rgba(255,255,255,.2);font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;padding:6px">Salta</button>
+    </div>
+    <div id="onboard-step-2" style="display:none">
+      <p style="color:#a3e635;font-size:10px;letter-spacing:2px;font-family:'Space Mono',monospace;margin-bottom:8px">OBIETTIVO</p>
+      <p style="font-size:24px;font-weight:700;color:#f5f5f7;letter-spacing:-.5px;margin-bottom:24px;line-height:1.1">Cosa vuoi ottenere?</p>
+      <div class="flex flex-col gap-3">
+        <button onclick="selOnboardObj('massa');nextOnboard(3)" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">Massa muscolare</button>
+        <button onclick="selOnboardObj('definizione');nextOnboard(3)" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">Definizione</button>
+        <button onclick="selOnboardObj('mantenimento');nextOnboard(3)" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">Mantenimento peso</button>
+      </div>
+    </div>
+    <div id="onboard-step-3" style="display:none">
+      <p style="color:#a3e635;font-size:10px;letter-spacing:2px;font-family:'Space Mono',monospace;margin-bottom:8px">ALLENAMENTO</p>
+      <p style="font-size:24px;font-weight:700;color:#f5f5f7;letter-spacing:-.5px;margin-bottom:24px;line-height:1.1">Quante volte ti alleni?</p>
+      <div class="flex flex-col gap-3">
+        <button onclick="selOnboardAtt('sedentario');finiOnboard()" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">Non mi alleno</button>
+        <button onclick="selOnboardAtt('leggero');finiOnboard()" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">1–3 volte a settimana</button>
+        <button onclick="selOnboardAtt('moderato');finiOnboard()" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">3–5 volte a settimana</button>
+        <button onclick="selOnboardAtt('intenso');finiOnboard()" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">6–7 volte a settimana</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:680px;background:rgba(8,11,8,.97);border-top:1px solid #1a221a;z-index:30;padding:8px 12px 22px;backdrop-filter:blur(12px)">
+    <div class="flex justify-around items-start">
+      <button class="nav-item active" id="nav-chat" onclick="setTab('chat')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <span>Chat</span>
+      </button>
+      <button class="nav-item" id="nav-oggi" onclick="setTab('oggi')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span>Oggi</span>
+      </button>
+      <button class="nav-item" id="nav-salute" onclick="setTab('salute')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        <span>Salute</span>
+      </button>
+      <button class="nav-item" id="nav-social" onclick="setTab('social')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span>Social</span>
+      </button>
+      <button class="nav-item" id="nav-more" onclick="toggleMoreNav()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg>
+        <span>Altro</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MORE MENU -->
+  <div id="more-overlay" onclick="closeMoreNav()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:31;backdrop-filter:blur(3px)"></div>
+  <div id="more-menu" style="display:none;position:fixed;bottom:74px;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:656px;background:#111;border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 0 0;padding:20px 16px 8px;z-index:32">
+    <div style="width:36px;height:3px;background:#2d3d2d;border-radius:99px;margin:0 auto 16px"></div>
+    <div class="grid grid-cols-3 gap-2">
+      <button onclick="setTab('macro');closeMoreNav()" class="more-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+        <span>Macro</span>
+      </button>
+      <button onclick="setTab('gym');closeMoreNav()" class="more-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        <span>Gym</span>
+      </button>
+      <button onclick="setTab('frigo');closeMoreNav()" class="more-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"></rect><line x1="2" y1="9" x2="22" y2="9"></line><circle cx="12" cy="15" r="2"></circle></svg>
+        <span>Frigo</span>
+      </button>
+      <button onclick="setTab('piano');closeMoreNav()" class="more-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><line x1="8" y1="14" x2="16" y2="14"></line><line x1="8" y1="18" x2="12" y2="18"></line></svg>
+        <span>Piano</span>
+      </button>
+      <button onclick="setTab('profilo');closeMoreNav()" class="more-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Profilo</span>
+      </button>
+      <button onclick="setTab('salvate');closeMoreNav()" class="more-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        <span>Salvate</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL SCELTA CARD -->
+  <div id="modal-overlay" onclick="closeModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;backdrop-filter:blur(4px)"></div>
+  <div id="modal" style="display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:680px;background:#111;border-top:1px solid #1a221a;border-radius:20px 20px 0 0;padding:24px 20px 36px;z-index:51;transition:transform .25s ease">
+    <div style="width:36px;height:3px;background:#2d3d2d;border-radius:99px;margin:0 auto 20px"></div>
+    <p id="modal-title" style="font-size:13px;color:rgba(255,255,255,.38);letter-spacing:2px;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:16px"></p>
+    <div id="modal-options" class="flex flex-col gap-2"></div>
+  </div>
+
+<script>
+  let hasMsg = false;
+
+  /* ── PIANO SETTIMANALE ── */
+  const GIORNI = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'];
+  const PASTI  = ['Colazione','Pranzo','Spuntino','Cena'];
+  let pianoObj = 'massa';
+  let piano = JSON.parse(localStorage.getItem('forma_piano') || '{}');
+
+  function selPianoObj(v) {
+    pianoObj = v;
+    ['massa','definizione','mantenimento'].forEach(x =>
+      document.getElementById('p-obj-'+x).classList.toggle('sel', x===v));
+  }
+
+  function renderPiano() {
+    const grid = document.getElementById('piano-grid');
+    grid.innerHTML = '';
+    GIORNI.forEach(giorno => {
+      const div = document.createElement('div');
+      div.className = 'card overflow-hidden';
+      div.innerHTML = `
+        <div style="background:#111;padding:8px 14px;border-bottom:1px solid #1a221a;display:flex;align-items:center;justify-content:space-between">
+          <p style="font-size:11px;font-weight:700;color:#a3e635;letter-spacing:2px;text-transform:uppercase;font-family:'Space Mono',monospace">${giorno}</p>
+          <button onclick="generaGiorno('${giorno}')" style="font-size:10px;color:rgba(255,255,255,.38);background:none;border:none;cursor:pointer;font-family:'Space Mono',monospace;letter-spacing:1px" onmouseover="this.style.color='#a3e635'" onmouseout="this.style.color='#4a6e4a'">GEN AI</button>
+        </div>
+        <div class="grid grid-cols-2 gap-0" style="border-top:none">
+          ${PASTI.map(pasto => `
+            <div style="padding:10px 12px;border-right:${pasto==='Pranzo'||pasto==='Cena'?'none':'1px solid #1a221a'};border-bottom:${pasto==='Colazione'||pasto==='Pranzo'?'1px solid #1a221a':'none'}">
+              <p style="font-size:9px;color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;font-family:'Space Mono',monospace">${pasto}</p>
+              <div id="cell-${giorno}-${pasto}" onclick="editCella('${giorno}','${pasto}')" style="min-height:28px;cursor:pointer">
+                ${piano[giorno]?.[pasto]
+                  ? `<p style="font-size:12px;color:#c8e0c8;line-height:1.4">${esc(piano[giorno][pasto])}</p>`
+                  : `<p style="font-size:11px;color:#1a221a">+ aggiungi</p>`}
+              </div>
+            </div>`).join('')}
+        </div>`;
+      grid.appendChild(div);
+    });
+  }
+
+  function editCella(giorno, pasto) {
+    const attuale = piano[giorno]?.[pasto] || '';
+    const nuovo = prompt(`${giorno} — ${pasto}:`, attuale);
+    if(nuovo === null) return;
+    if(!piano[giorno]) piano[giorno] = {};
+    piano[giorno][pasto] = nuovo;
+    localStorage.setItem('forma_piano', JSON.stringify(piano));
+    renderPiano();
+  }
+
+  function generaGiorno(giorno) {
+    const kcal = document.getElementById('p-kcal').value;
+    const kcalTxt = kcal ? `, ${kcal} kcal totali` : '';
+    setTab('chat');
+    invia(`Dammi un piano pasti completo per ${giorno}: colazione, pranzo, spuntino e cena. Obiettivo: ${pianoObj}${kcalTxt}. Formato: solo i nomi dei piatti per ogni slot, senza ricetta dettagliata.`);
+  }
+
+  function generaPiano() {
+    const kcal = document.getElementById('p-kcal').value;
+    const kcalTxt = kcal ? `, ${kcal} kcal/giorno` : '';
+    setTab('chat');
+    invia(`Crea un piano pasti per tutta la settimana (lunedì-domenica). Obiettivo: ${pianoObj}${kcalTxt}. Per ogni giorno: colazione, pranzo, spuntino, cena. Solo nomi dei piatti, formato compatto. Alla fine dammi i macro medi giornalieri.`);
+  }
+
+  function resetPiano() {
+    if(!confirm('Azzeri tutto il piano?')) return;
+    piano = {};
+    localStorage.setItem('forma_piano', JSON.stringify(piano));
+    renderPiano();
+  }
+  let frigoObj = 'massa';
+  let frigoTempo = '';
+  let macroObiettivo = 'massa';
+  let savedRecipes = JSON.parse(localStorage.getItem('forma_saved') || '[]');
+  let macroCalcolati = null;
+
+  /* TABS */
+  function setTab(t) {
+    ['chat','oggi','macro','frigo','gym','piano','profilo','salvate','salute','social'].forEach(id =>
+      document.getElementById('view-'+id).classList.add('hidden')
+    );
+    ['chat','oggi','salute','social','more'].forEach(id => {
+      const el = document.getElementById('nav-'+id);
+      if(el) el.classList.remove('active');
+    });
+    const view = document.getElementById('view-'+t);
+    view.classList.remove('hidden');
+    view.classList.add('tab-enter');
+    setTimeout(() => view.classList.remove('tab-enter'), 250);
+    // Activate bottom nav button
+    const navMap = {chat:'chat',oggi:'oggi',salute:'salute',social:'social',macro:'more',gym:'more',frigo:'more',piano:'more',profilo:'more',salvate:'more'};
+    const navBtn = document.getElementById('nav-'+(navMap[t]||t));
+    if(navBtn) navBtn.classList.add('active');
+    if(t==='salvate') renderSaved();
+    if(t==='piano') renderPiano();
+    if(t==='oggi') { renderDiario(); renderAcqua(); }
+    if(t==='profilo') caricaProfilo();
+    if(t==='salute') renderSalute();
+    if(t==='social') renderFeed();
+    if(t==='chat') document.getElementById('input').focus();
+  }
+
+  function toggleMoreNav() {
+    const isOpen = document.getElementById('more-menu').style.display !== 'none';
+    document.getElementById('more-overlay').style.display = isOpen ? 'none' : 'block';
+    document.getElementById('more-menu').style.display = isOpen ? 'none' : 'block';
+    document.getElementById('nav-more').classList.toggle('active', !isOpen);
+  }
+  function closeMoreNav() {
+    document.getElementById('more-overlay').style.display = 'none';
+    document.getElementById('more-menu').style.display = 'none';
+    // Re-check which nav is active
+    const navMap = {chat:'chat',oggi:'oggi',salute:'salute',social:'social',macro:'more',gym:'more',frigo:'more',piano:'more',profilo:'more',salvate:'more'};
+    const cur = document.querySelector('[id^="view-"]:not(.hidden)')?.id.replace('view-','');
+    if(cur && navMap[cur]==='more') document.getElementById('nav-more').classList.add('active');
+    else document.getElementById('nav-more').classList.remove('active');
+  }
+
+  /* ── PROFILO ── */
+  let profObj = 'massa';
+  function selProfObj(v) {
+    profObj = v;
+    ['massa','definizione','mantenimento'].forEach(x => document.getElementById('prof-'+x)?.classList.toggle('sel', x===v));
+  }
+
+  function salvaProfilo() {
+    const attivita = document.querySelector('input[name="prof-attivita"]:checked')?.value || 'leggero';
+    const p = {
+      nome: document.getElementById('prof-nome').value,
+      peso: +document.getElementById('prof-peso').value,
+      altezza: +document.getElementById('prof-altezza').value,
+      eta: +document.getElementById('prof-eta').value,
+      sesso: document.getElementById('prof-sesso').value,
+      obiettivo: profObj,
+      attivita,
+      restrizioni: document.getElementById('prof-restrizioni').value
+    };
+    // Calcola macro
+    if(p.peso && p.altezza && p.eta) {
+      let bmr = p.sesso==='M' ? 10*p.peso+6.25*p.altezza-5*p.eta+5 : 10*p.peso+6.25*p.altezza-5*p.eta-161;
+      const mult = {sedentario:1.2,leggero:1.375,moderato:1.55,intenso:1.725};
+      let tdee = Math.round(bmr * (mult[p.attivita]||1.375));
+      const adj = {massa:350,definizione:-400,mantenimento:0};
+      p.kcal = tdee + adj[p.obiettivo];
+      const splits = {massa:{pr:.30,c:.40,g:.30},definizione:{pr:.35,c:.35,g:.30},mantenimento:{pr:.30,c:.35,g:.35}};
+      const s = splits[p.obiettivo];
+      p.prot  = Math.round(p.kcal*s.pr/4);
+      p.carb  = Math.round(p.kcal*s.c/4);
+      p.grassi= Math.round(p.kcal*s.g/9);
+      document.getElementById('prof-r-kcal').textContent = p.kcal;
+      document.getElementById('prof-r-prot').textContent = p.prot+'g';
+      document.getElementById('prof-r-carb').textContent = p.carb+'g';
+      document.getElementById('prof-r-grassi').textContent = p.grassi+'g';
+      document.getElementById('prof-macro-box').classList.remove('hidden');
+    }
+    localStorage.setItem('forma_profilo', JSON.stringify(p));
+    document.getElementById('prof-saved').style.display = 'block';
+    setTimeout(() => document.getElementById('prof-saved').style.display = 'none', 3000);
+  }
+
+  function caricaProfilo() {
+    const p = JSON.parse(localStorage.getItem('forma_profilo') || 'null');
+    if(!p) return;
+    document.getElementById('prof-nome').value = p.nome || '';
+    document.getElementById('prof-peso').value = p.peso || '';
+    document.getElementById('prof-altezza').value = p.altezza || '';
+    document.getElementById('prof-eta').value = p.eta || '';
+    document.getElementById('prof-sesso').value = p.sesso || 'M';
+    document.getElementById('prof-restrizioni').value = p.restrizioni || '';
+    if(p.obiettivo) selProfObj(p.obiettivo);
+    if(p.attivita) { const r = document.querySelector(`input[name="prof-attivita"][value="${p.attivita}"]`); if(r) r.checked = true; }
+    if(p.kcal) {
+      document.getElementById('prof-r-kcal').textContent = p.kcal;
+      document.getElementById('prof-r-prot').textContent = p.prot+'g';
+      document.getElementById('prof-r-carb').textContent = p.carb+'g';
+      document.getElementById('prof-r-grassi').textContent = p.grassi+'g';
+      document.getElementById('prof-macro-box').classList.remove('hidden');
+    }
+  }
+
+  function getProfilo() {
+    const p = JSON.parse(localStorage.getItem('forma_profilo') || 'null');
+    if(!p || !p.nome) return '';
+    return `Nome: ${p.nome}, Peso: ${p.peso}kg, Altezza: ${p.altezza}cm, Età: ${p.eta}, Sesso: ${p.sesso}, Obiettivo: ${p.obiettivo}, Attività: ${p.attivita}${p.restrizioni ? ', Restrizioni: '+p.restrizioni : ''}${p.kcal ? ', Target kcal: '+p.kcal+', Prot: '+p.prot+'g, Carb: '+p.carb+'g, Grassi: '+p.grassi+'g' : ''}`;
+  }
+
+  /* ── DIARIO MACRO ── */
+  function getDiarioKey() { return 'forma_diario_'+new Date().toISOString().slice(0,10); }
+
+  function getDiario() { return JSON.parse(localStorage.getItem(getDiarioKey()) || '{"pasti":[]}'); }
+
+  function aggiungiPasto() {
+    const nome = document.getElementById('d-nome').value.trim() || 'Pasto';
+    const kcal = +document.getElementById('d-kcal').value || 0;
+    const prot = +document.getElementById('d-prot').value || 0;
+    const carb = +document.getElementById('d-carb').value || 0;
+    const grassi = +document.getElementById('d-grassi').value || 0;
+    if(!kcal) return;
+    const d = getDiario();
+    d.pasti.push({nome, kcal, prot, carb, grassi, ora: new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})});
+    localStorage.setItem(getDiarioKey(), JSON.stringify(d));
+    ['d-nome','d-kcal','d-prot','d-carb','d-grassi'].forEach(id => document.getElementById(id).value = '');
+    renderDiario();
+  }
+
+  function rimuoviPasto(i) {
+    const d = getDiario(); d.pasti.splice(i,1);
+    localStorage.setItem(getDiarioKey(), JSON.stringify(d));
+    renderDiario();
+  }
+
+  function renderDiario() {
+    const d = getDiario();
+    const p = JSON.parse(localStorage.getItem('forma_profilo') || 'null');
+    const totali = d.pasti.reduce((acc,p) => ({kcal:acc.kcal+p.kcal,prot:acc.prot+p.prot,carb:acc.carb+p.carb,grassi:acc.grassi+p.grassi}), {kcal:0,prot:0,carb:0,grassi:0});
+
+    document.getElementById('oggi-data').textContent = new Date().toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'});
+
+    const perc = (v, t) => t ? Math.min(Math.round(v/t*100),100) : 0;
+    const tK = p?.kcal, tP = p?.prot, tC = p?.carb, tG = p?.grassi;
+
+    document.getElementById('bar-kcal').style.width = perc(totali.kcal,tK)+'%';
+    document.getElementById('bar-prot').style.width = perc(totali.prot,tP)+'%';
+    document.getElementById('bar-carb').style.width = perc(totali.carb,tC)+'%';
+    document.getElementById('bar-grassi').style.width = perc(totali.grassi,tG)+'%';
+    document.getElementById('bar-kcal-txt').textContent = `${totali.kcal} / ${tK||'—'} kcal`;
+    document.getElementById('bar-prot-txt').textContent = `${totali.prot}g / ${tP?tP+'g':'—'}`;
+    document.getElementById('bar-carb-txt').textContent = `${totali.carb}g / ${tC?tC+'g':'—'}`;
+    document.getElementById('bar-grassi-txt').textContent = `${totali.grassi}g / ${tG?tG+'g':'—'}`;
+
+    const lista = document.getElementById('lista-pasti');
+    lista.innerHTML = d.pasti.length === 0
+      ? '<p style="text-align:center;color:rgba(255,255,255,.2);font-size:13px;padding:20px 0">Nessun pasto registrato oggi.</p>'
+      : d.pasti.map((p,i) => `
+        <div class="card p-3 flex items-center justify-between gap-3">
+          <div class="flex flex-col gap-1 flex-1">
+            <div class="flex items-center justify-between">
+              <p style="font-size:13px;color:#f5f5f7;font-weight:500">${esc(p.nome)}</p>
+              <p style="font-size:10px;color:rgba(255,255,255,.2);font-family:'Space Mono',monospace">${p.ora}</p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+              <span style="font-size:11px;color:#a3e635;font-family:'Space Mono',monospace">${p.kcal} kcal</span>
+              <span style="font-size:11px;color:#60a5fa;font-family:'Space Mono',monospace">P ${p.prot}g</span>
+              <span style="font-size:11px;color:#f59e0b;font-family:'Space Mono',monospace">C ${p.carb}g</span>
+              <span style="font-size:11px;color:#f87171;font-family:'Space Mono',monospace">G ${p.grassi}g</span>
+            </div>
+          </div>
+          <button onclick="rimuoviPasto(${i})" style="color:rgba(255,255,255,.2);background:none;border:none;cursor:pointer;font-size:18px" onmouseover="this.style.color='#f87171'" onmouseout="this.style.color='#2d3d2d'">×</button>
+        </div>`).join('');
+  }
+
+  function resetDiario() {
+    localStorage.removeItem(getDiarioKey());
+    renderDiario();
+  }
+
+  /* ── LISTA SPESA DAL PIANO ── */
+  function generaListaSpesa() {
+    const pianoTxt = GIORNI.map(g => {
+      const pasti = piano[g];
+      if(!pasti) return null;
+      return `${g}: ${Object.entries(pasti).map(([k,v])=>v?`${k}: ${v}`:'').filter(Boolean).join(', ')}`;
+    }).filter(Boolean).join('\n');
+    if(!pianoTxt) { alert('Aggiungi prima dei pasti al piano!'); return; }
+    setTab('chat');
+    invia(`Partendo da questo piano settimanale:\n${pianoTxt}\n\nGenera una lista della spesa organizzata per categoria (frutta/verdura, carne/pesce, latticini, secchi, altro). Quantità per 2 persone.`);
+  }
+
+  /* OBIETTIVI */
+  function selObiettivo(v) {
+    macroObiettivo = v;
+    ['massa','definizione','mantenimento'].forEach(x => document.getElementById('obj-'+x).classList.toggle('sel', x===v));
+  }
+  function selFrigoObj(v) {
+    frigoObj = v;
+    ['massa','definizione','qualsiasi'].forEach(x => document.getElementById('fg-'+x).classList.toggle('sel', x===v));
+  }
+  function selFrigoTempo(v) {
+    frigoTempo = frigoTempo===v ? '' : v;
+    ['15','30','60'].forEach(x => document.getElementById('ft-'+x).classList.toggle('sel', frigoTempo===x));
+  }
+
+  /* CALCOLA MACRO (lato client - formula Mifflin-St Jeor) */
+  function calcolaMacro() {
+    const peso = +document.getElementById('m-peso').value;
+    const altezza = +document.getElementById('m-altezza').value;
+    const eta = +document.getElementById('m-eta').value;
+    const sesso = document.getElementById('m-sesso').value;
+    const attivita = document.querySelector('input[name="attivita"]:checked').value;
+
+    if(!peso||!altezza||!eta) { alert('Inserisci tutti i dati'); return; }
+
+    // BMR Mifflin-St Jeor
+    let bmr = sesso==='M'
+      ? 10*peso + 6.25*altezza - 5*eta + 5
+      : 10*peso + 6.25*altezza - 5*eta - 161;
+
+    // TDEE
+    const mult = {sedentario:1.2,leggero:1.375,moderato:1.55,intenso:1.725};
+    let tdee = Math.round(bmr * mult[attivita]);
+
+    // Aggiusta per obiettivo
+    const adj = {massa:350,definizione:-400,mantenimento:0};
+    const kcal = tdee + adj[macroObiettivo];
+
+    // Macro split
+    const splits = {
+      massa:     {p:.30,c:.40,g:.30},
+      definizione:{p:.35,c:.35,g:.30},
+      mantenimento:{p:.30,c:.35,g:.35}
+    };
+    const s = splits[macroObiettivo];
+    const prot  = Math.round(kcal * s.p / 4);
+    const carb  = Math.round(kcal * s.c / 4);
+    const grassi= Math.round(kcal * s.g / 9);
+
+    document.getElementById('r-kcal').textContent = kcal;
+    document.getElementById('r-prot').textContent = prot + 'g';
+    document.getElementById('r-carb').textContent = carb + 'g';
+    document.getElementById('r-grassi').textContent = grassi + 'g';
+    document.getElementById('macro-result').classList.remove('hidden');
+
+    macroCalcolati = {kcal, prot, carb, grassi, obiettivo: macroObiettivo};
+  }
+
+  function chiediRicetteMacro() {
+    if(!macroCalcolati) return;
+    const {kcal,prot,carb,grassi,obiettivo} = macroCalcolati;
+    setTab('chat');
+    invia(`Ho calcolato i miei macro: ${kcal} kcal, ${prot}g proteine, ${carb}g carb, ${grassi}g grassi. Obiettivo: ${obiettivo}. Dammi un piano pasti per domani che rispetta questi valori, con macro per ogni pasto.`);
+  }
+
+  /* FRIGO */
+  function usaFrigo() {
+    const ing = document.getElementById('frigo-input').value.trim();
+    if(!ing) return;
+    const tempo = frigoTempo ? ` Tempo massimo: ${frigoTempo} minuti.` : '';
+    setTab('chat');
+    invia(`Ho in frigo: ${ing}. Obiettivo: ${frigoObj}.${tempo} Dimmi 2 ricette ottimizzate con macro complete.`);
+  }
+
+  /* CHAT */
+  function addMsg(text, type) {
+    if(!hasMsg) { document.getElementById('welcome')?.remove(); hasMsg = true; }
+    const chat = document.getElementById('chat');
+    const div = document.createElement('div');
+    div.className = 'fade-up flex gap-3 ' + (type==='user'?'flex-row-reverse':'');
+
+    if(text==='__typing__') {
+      div.innerHTML = `<div style="width:32px;height:32px;border-radius:10px;background:#111;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">⚡</div>
+        <div class="bot-bubble px-4 py-3 flex gap-1 items-center">
+          <span class="w-2 h-2 rounded-full d1" style="background:#a3e635;display:inline-block"></span>
+          <span class="w-2 h-2 rounded-full d2" style="background:#a3e635;display:inline-block"></span>
+          <span class="w-2 h-2 rounded-full d3" style="background:#a3e635;display:inline-block"></span>
+        </div>`;
+    } else if(type==='user') {
+      div.innerHTML = `<div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#a3e635,#65a30d);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🧑</div>
+        <div class="user-bubble px-4 py-3 text-sm max-w-xs">${esc(text)}</div>`;
+    } else {
+      const id='m'+Date.now();
+      div.innerHTML = `
+        <div style="width:32px;height:32px;border-radius:10px;background:#111;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px">⚡</div>
+        <div class="flex flex-col gap-2">
+          <div class="bot-bubble px-4 py-3 text-sm leading-relaxed" id="${id}" style="color:#c8e0c8;max-width:360px">${formatBot(text)}</div>
+          <div class="flex gap-2">
+            <button class="act-btn" onclick="saveRecipe(\`${esc2(text)}\`)">Salva</button>
+            <button class="act-btn" onclick="copyText(this,\`${esc2(text)}\`)">Copia</button>
+          </div>
+        </div>`;
+    }
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+    return div;
+  }
+
+  function formatBot(raw) {
+    let t = raw;
+
+    // Tabella macro markdown |col|col|
+    t = t.replace(/\|(.+)\|\n\|[-| ]+\|\n((?:\|.+\|\n?)+)/g, (_, header, rows) => {
+      const ths = header.split('|').filter(x=>x.trim()).map(h=>`<th>${h.trim()}</th>`).join('');
+      const trs = rows.trim().split('\n').map(row => {
+        const tds = row.split('|').filter(x=>x.trim()).map(d=>`<td>${d.trim()}</td>`).join('');
+        return `<tr>${tds}</tr>`;
+      }).join('');
+      return `<table class="macro-table"><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table>`;
+    });
+
+    // Titoli ## → header
+    t = t.replace(/^## (.+)$/gm, '<p class="resp-title">$1</p>');
+
+    // Corsivo *testo* → meta info
+    t = t.replace(/\*([^*]+)\*/g, '<span class="resp-meta">$1</span>');
+
+    // Bold **testo**
+    t = t.replace(/\*\*([^*]+)\*\*/g, '<strong class="resp-bold">$1</strong>');
+
+    // Liste - item
+    t = t.replace(/^- (.+)$/gm, '<div class="resp-li"><span class="resp-dot"></span><span>$1</span></div>');
+
+    // Numerazione 1. 2. 3. — step number clickable to start timer
+    t = t.replace(/^(\d+)\. (.+)$/gm,
+      '<div class="resp-step"><span class="resp-num" style="cursor:pointer" onclick="promptTimer()" title="Timer">$1</span><span>$2</span></div>');
+
+    // A capo
+    t = t.replace(/\n{2,}/g, '<div class="resp-gap"></div>');
+    t = t.replace(/\n/g, '<br>');
+
+    return t;
+  }
+
+  function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function esc2(t){return t.replace(/`/g,'\\`').replace(/\n/g,'\\n')}
+
+  async function invia(testo) {
+    testo = testo || document.getElementById('input').value;
+    if(!testo.trim()) return;
+    document.getElementById('input').value='';
+    document.getElementById('input').style.height='auto';
+    document.getElementById('send').disabled=true;
+    addMsg(testo,'user');
+    const typing = addMsg('__typing__','bot');
+    try {
+      const r = await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messaggio:testo, profilo:getProfilo()})});
+      typing.remove();
+
+      // Streaming: crea bolla vuota e riempila in tempo reale
+      const bubble = addStreamBubble();
+      const reader = r.body.getReader();
+      const decoder = new TextDecoder();
+      let raw = '';
+
+      while(true) {
+        const {done, value} = await reader.read();
+        if(done) break;
+        const lines = decoder.decode(value).split('\n');
+        for(const line of lines) {
+          if(!line.startsWith('data: ')) continue;
+          const chunk = line.slice(6);
+          if(chunk === '[DONE]') break;
+          raw += chunk;
+          bubble.innerHTML = formatBot(raw);
+          document.getElementById('chat').scrollTop = 999999;
+        }
+      }
+      // Aggiunge pulsanti dopo completamento
+      bubble.parentElement.insertAdjacentHTML('beforeend',
+        `<div class="flex gap-2">
+          <button class="act-btn" onclick="saveRecipe(\`${esc2(raw)}\`)">Salva</button>
+          <button class="act-btn" onclick="copyText(this,\`${esc2(raw)}\`)">Copia</button>
+        </div>`);
+    } catch {
+      addMsg('Connessione persa. Riprova.','bot');
+    }
+    document.getElementById('send').disabled=false;
+    document.getElementById('input').focus();
+  }
+
+  function addStreamBubble() {
+    if(!hasMsg) { document.getElementById('welcome')?.remove(); hasMsg = true; }
+    const chat = document.getElementById('chat');
+    const div = document.createElement('div');
+    div.className = 'fade-up flex gap-3';
+    div.innerHTML = `
+      <div style="width:32px;height:32px;border-radius:10px;background:#111;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px">⚡</div>
+      <div class="flex flex-col gap-2" style="max-width:360px">
+        <div class="bot-bubble px-4 py-3 text-sm leading-relaxed" id="stream-bubble" style="color:#c8e0c8;min-width:40px;min-height:20px"></div>
+      </div>`;
+    chat.appendChild(div);
+    chat.scrollTop = 999999;
+    return div.querySelector('#stream-bubble');
+  }
+
+  function inviaForm(){invia(document.getElementById('input').value)}
+
+  async function resetChat(){
+    await fetch('/reset',{method:'POST'});
+    location.reload();
+  }
+
+  /* SAVE/COPY */
+  function saveRecipe(text) {
+    const title = text.replace(/\\n/g,'\n').split('\n')[0].replace(/[*#]/g,'').trim().slice(0,60);
+    savedRecipes.unshift({title,text:text.replace(/\\n/g,'\n'),date:new Date().toLocaleDateString('it-IT')});
+    if(savedRecipes.length>30) savedRecipes.pop();
+    localStorage.setItem('forma_saved',JSON.stringify(savedRecipes));
+    event.target.textContent='Salvata';
+    setTimeout(()=>event.target.textContent='Salva',2000);
+  }
+
+  function copyText(btn,text){
+    navigator.clipboard.writeText(text.replace(/\\n/g,'\n'));
+    btn.textContent='Copiata';
+    setTimeout(()=>btn.textContent='Copia',2000);
+  }
+
+  function renderSaved(){
+    const list=document.getElementById('salvate-list');
+    const empty=document.getElementById('salvate-empty');
+    list.innerHTML='';
+    empty.style.display=savedRecipes.length?'none':'block';
+    savedRecipes.forEach((r,i)=>{
+      const d=document.createElement('div');
+      d.className='card p-4 cursor-pointer';
+      d.innerHTML=`<div class="flex justify-between items-start gap-2">
+        <div><p class="text-sm font-medium" style="color:#f5f5f7">${esc(r.title)}</p>
+        <p style="color:rgba(255,255,255,.2);font-size:11px;font-family:Space Mono,monospace;margin-top:3px">${r.date}</p></div>
+        <button onclick="deleteSaved(${i})" style="color:rgba(255,255,255,.2);background:none;border:none;cursor:pointer;font-size:18px;line-height:1" class="hover:text-red-500">×</button>
+      </div>`;
+      d.onclick=(e)=>{if(e.target.tagName!=='BUTTON'){setTab('chat');invia('Mostrami di nuovo: '+r.title)}};
+      list.appendChild(d);
+    });
+  }
+
+  function deleteSaved(i){
+    savedRecipes.splice(i,1);
+    localStorage.setItem('forma_saved',JSON.stringify(savedRecipes));
+    renderSaved();
+  }
+
+  document.getElementById('input').focus();
+
+  /* ── MODAL ── */
+  function openModal(categoria, opzioni) {
+    document.getElementById('modal-title').textContent = categoria;
+    const cont = document.getElementById('modal-options');
+    cont.innerHTML = opzioni.map(op => `
+      <button onclick="scegliOpzione('${categoria}','${op}')"
+        style="width:100%;text-align:left;padding:14px 16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:12px;color:#c8e0c8;font-size:14px;font-family:'Inter',sans-serif;cursor:pointer;transition:border-color .15s"
+        onmouseover="this.style.borderColor='#a3e63540'" onmouseout="this.style.borderColor='#1a221a'">
+        ${op}
+      </button>`).join('');
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('modal').style.display = 'block';
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('modal').style.display = 'none';
+  }
+
+  function scegliOpzione(categoria, opzione) {
+    closeModal();
+    invia(`${categoria}: ${opzione}. Dammi la ricetta con macro completi.`);
+  }
+
+  /* ── HERO ── */
+  function calcolaStreak() {
+    let streak = 0;
+    const oggi = new Date();
+    for(let i=0; i<90; i++) {
+      const d = new Date(oggi); d.setDate(d.getDate()-i);
+      const key = 'forma_diario_'+d.toISOString().slice(0,10);
+      const diario = JSON.parse(localStorage.getItem(key)||'{"pasti":[]}');
+      if(diario.pasti.length > 0) streak++;
+      else if(i > 0) break; // gap → stop (day 0 = today, skip if empty)
+    }
+    return streak;
+  }
+
+  function initHero() {
+    const p = JSON.parse(localStorage.getItem('forma_profilo')||'null');
+    if(p?.nome) {
+      const h = new Date().getHours();
+      const saluto = h<5?'Buonanotte':h<12?'Buongiorno':h<18?'Buon pomeriggio':'Buonasera';
+      document.getElementById('hero-greeting').textContent = saluto+', '+p.nome.split(' ')[0];
+    }
+    const streak = calcolaStreak();
+    if(streak>0) {
+      document.getElementById('streak-num').textContent = streak;
+      document.getElementById('hero-streak').style.display = 'block';
+    }
+    if(p?.obiettivo) {
+      const labels = {massa:'Massa',definizione:'Definizione',mantenimento:'Mantenimento'};
+      document.getElementById('hero-obj-txt').textContent = labels[p.obiettivo]||p.obiettivo;
+      document.getElementById('hero-obj').style.display = 'block';
+    }
+  }
+
+  /* ── ACQUA ── */
+  function getAcquaKey(){ return 'forma_acqua_'+new Date().toISOString().slice(0,10); }
+  function getAcqua(){ return parseInt(localStorage.getItem(getAcquaKey())||'0'); }
+
+  function renderAcqua() {
+    const n = getAcqua();
+    document.getElementById('acqua-txt').textContent = n+' / 8';
+    const cont = document.getElementById('acqua-glasses');
+    if(!cont) return;
+    cont.innerHTML='';
+    for(let i=1; i<=8; i++) {
+      const filled = i<=n;
+      const btn = document.createElement('button');
+      btn.style.cssText='background:none;border:none;cursor:pointer;padding:2px;display:flex;flex-direction:column;align-items:center;gap:3px';
+      btn.innerHTML=`<svg width="26" height="34" viewBox="0 0 28 36" fill="none">
+        <path d="M5 6L7 32H21L23 6H5Z" fill="${filled?'rgba(163,230,53,.2)':'rgba(255,255,255,.03)'}" stroke="${filled?'#a3e635':'#2d3d2d'}" stroke-width="1.5" stroke-linejoin="round"/>
+        <line x1="9" y1="14" x2="19" y2="14" stroke="${filled?'rgba(163,230,53,.35)':'rgba(255,255,255,.04)'}" stroke-width="1"/>
+      </svg>
+      <span style="font-size:8px;font-family:'Space Mono',monospace;color:${filled?'#a3e635':'#2d3d2d'};line-height:1">${i}</span>`;
+      btn.onclick=()=>toggleAcqua(i);
+      cont.appendChild(btn);
+    }
+  }
+
+  function toggleAcqua(i) {
+    const n = getAcqua();
+    localStorage.setItem(getAcquaKey(), n===i ? i-1 : i);
+    renderAcqua();
+  }
+
+  /* ── TIMER ── */
+  let timerSec=0, timerRunning=false, timerInterval=null;
+
+  function promptTimer() {
+    document.getElementById('timer-prompt-overlay').style.display='block';
+    document.getElementById('timer-prompt').style.display='block';
+    document.getElementById('timer-custom').value='';
+    setTimeout(()=>document.getElementById('timer-custom').focus(),100);
+  }
+  function closeTimerPrompt() {
+    document.getElementById('timer-prompt-overlay').style.display='none';
+    document.getElementById('timer-prompt').style.display='none';
+  }
+  function avviaTimerDa(m){ closeTimerPrompt(); avviaTimer(m); }
+  function avviaTimerCustom(){
+    const v=parseInt(document.getElementById('timer-custom').value);
+    if(!v||v<1) return;
+    avviaTimerDa(v);
+  }
+
+  function avviaTimer(minutes) {
+    if(timerInterval) clearInterval(timerInterval);
+    timerSec=minutes*60; timerRunning=true;
+    document.getElementById('timer-bar').style.display='flex';
+    document.getElementById('timer-play').innerHTML='&#9646;&#9646;';
+    document.getElementById('timer-label').textContent=minutes+' MIN';
+    aggiornaTimer();
+    timerInterval=setInterval(()=>{
+      if(!timerRunning) return;
+      timerSec--;
+      aggiornaTimer();
+      if(timerSec<=0){
+        clearInterval(timerInterval); timerRunning=false;
+        document.getElementById('timer-display').textContent='FATTO';
+        document.getElementById('timer-play').innerHTML='&#9654;';
+        if(navigator.vibrate) navigator.vibrate([300,100,300]);
+        setTimeout(()=>document.getElementById('timer-bar').style.display='none',4000);
+      }
+    },1000);
+  }
+  function aggiornaTimer(){
+    const m=Math.floor(timerSec/60).toString().padStart(2,'0');
+    const s=(timerSec%60).toString().padStart(2,'0');
+    document.getElementById('timer-display').textContent=m+':'+s;
+  }
+  function toggleTimer(){
+    timerRunning=!timerRunning;
+    document.getElementById('timer-play').innerHTML=timerRunning?'&#9646;&#9646;':'&#9654;';
+  }
+  function stopTimer(){
+    clearInterval(timerInterval); timerRunning=false; timerInterval=null;
+    document.getElementById('timer-bar').style.display='none';
+  }
+
+  /* ── ONBOARDING ── */
+  let obNome='', obObj='massa', obAtt='leggero';
+
+  function initOnboarding(){
+    const p=JSON.parse(localStorage.getItem('forma_profilo')||'null');
+    if(p?.nome) return;
+    document.getElementById('onboard-overlay').style.display='block';
+    document.getElementById('onboard-modal').style.display='block';
+    setTimeout(()=>document.getElementById('ob-nome')?.focus(),200);
+  }
+  function nextOnboard(toStep){
+    if(toStep===2){
+      const nome=document.getElementById('ob-nome').value.trim();
+      if(!nome){ document.getElementById('ob-nome').focus(); return; }
+      obNome=nome;
+    }
+    [1,2,3].forEach(s=>
+      document.getElementById('onboard-step-'+s).style.display=s===toStep?'block':'none'
+    );
+  }
+  function selOnboardObj(v){ obObj=v; }
+  function selOnboardAtt(v){ obAtt=v; }
+  function finiOnboard(){
+    const p={nome:obNome,obiettivo:obObj,attivita:obAtt,sesso:'M',peso:0,altezza:0,eta:0};
+    localStorage.setItem('forma_profilo',JSON.stringify(p));
+    document.getElementById('onboard-overlay').style.display='none';
+    document.getElementById('onboard-modal').style.display='none';
+    initHero();
+    setTimeout(()=>invia('Ciao! Mi chiamo '+obNome+'. Obiettivo '+obObj+'. Dammi una ricetta perfetta per iniziare, con macro.'),400);
+  }
+  function skipOnboard(){
+    document.getElementById('onboard-overlay').style.display='none';
+    document.getElementById('onboard-modal').style.display='none';
+  }
+
+  /* ── SALUTE ── */
+  function getSaluteKey() { return 'forma_salute_'+new Date().toISOString().slice(0,10); }
+
+  function loadDatiSalute() {
+    return JSON.parse(localStorage.getItem(getSaluteKey()) || 'null');
+  }
+
+  function updateRing(id, val, max, circumference) {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const pct = Math.min(val / max, 1);
+    el.style.strokeDashoffset = circumference - pct * circumference;
+  }
+
+  function updateSaluteUI(data) {
+    const passi = data.passi || 0;
+    const cal   = data.cal   || 0;
+    const min   = cal ? Math.round(cal / 7) : 0;
+    document.getElementById('sal-passi-big').textContent = passi.toLocaleString('it-IT');
+    document.getElementById('sal-km').textContent  = (passi * 0.00075).toFixed(1);
+    document.getElementById('sal-cal').textContent = cal;
+    document.getElementById('sal-fc').textContent  = data.fc   || '—';
+    document.getElementById('sal-up').textContent  = data.up   || 0;
+    document.getElementById('sal-down').textContent= data.down || 0;
+    document.getElementById('sal-sonno').textContent = data.sonno || '—';
+    // Rings: passi/10000, cal/600, min/60
+    updateRing('ring-passi', passi, 10000, 534);
+    updateRing('ring-cal',   cal,   600,   433);
+    updateRing('ring-min',   min,   60,    333);
+    // Fill inputs
+    ['passi','cal','fc','up','down','sonno'].forEach(k => {
+      const el = document.getElementById('sal-in-'+k);
+      if(el && data[k]) el.value = data[k];
+    });
+  }
+
+  function renderSalute() {
+    const data = loadDatiSalute();
+    if(data) updateSaluteUI(data);
+  }
+
+  function salvaDatiSalute() {
+    const data = {
+      passi: +document.getElementById('sal-in-passi').value || 0,
+      cal:   +document.getElementById('sal-in-cal').value   || 0,
+      fc:    +document.getElementById('sal-in-fc').value    || 0,
+      up:    +document.getElementById('sal-in-up').value    || 0,
+      down:  +document.getElementById('sal-in-down').value  || 0,
+      sonno: +document.getElementById('sal-in-sonno').value || 0
+    };
+    localStorage.setItem(getSaluteKey(), JSON.stringify(data));
+    updateSaluteUI(data);
+    // brief flash on button
+    const btn = event.target;
+    btn.textContent = 'Salvato ✓';
+    setTimeout(() => btn.textContent = 'SALVA DATI', 2000);
+  }
+
+  function simulaGiornata() {
+    const data = {
+      passi: Math.round(5500 + Math.random()*6500),
+      cal:   Math.round(280  + Math.random()*420),
+      fc:    Math.round(58   + Math.random()*32),
+      up:    Math.round(40   + Math.random()*220),
+      down:  Math.round(40   + Math.random()*220),
+      sonno: Math.round((5.5 + Math.random()*3) * 2) / 2
+    };
+    localStorage.setItem(getSaluteKey(), JSON.stringify(data));
+    updateSaluteUI(data);
+  }
+
+  function getSaluteStr() {
+    const data = loadDatiSalute();
+    if(!data) return 'nessun dato disponibile per oggi';
+    const km = (data.passi * 0.00075).toFixed(1);
+    return `Passi: ${data.passi}, Distanza: ${km}km, Calorie attive: ${data.cal}kcal, FC media: ${data.fc}bpm, Salita: ${data.up}m, Discesa: ${data.down}m, Sonno: ${data.sonno}h`;
+  }
+
+  /* ── SOCIAL ── */
+  const MOCK_POSTS = [
+    {id:'mp1',autore:'Marco T.',avatar:'MT',colore:'#a3e635',tipo:'meal',
+     testo:'Pasta al salmone post-workout — 42g proteine, 380kcal. Semplice, veloce, ottima.',ora:'2h fa',likes:7,liked:false},
+    {id:'mp2',autore:'Sara B.',avatar:'SB',colore:'#60a5fa',tipo:'workout',
+     testo:'Upper body + 20 min HIIT completato. Peso stabile a 54kg. Obiettivo definizione raggiunto al 70%.',ora:'4h fa',likes:12,liked:false},
+    {id:'mp3',autore:'Luca R.',avatar:'LR',colore:'#f87171',tipo:'result',
+     testo:'Dopo 8 settimane di massa: +3.2kg. I macro funzionano davvero quando li segui con costanza.',ora:'ieri',likes:31,liked:false},
+    {id:'mp4',autore:'Giulia M.',avatar:'GM',colore:'#a78bfa',tipo:'meal',
+     testo:'Colazione proteica: yogurt greco + granola homemade + frutti rossi. 28g prot, 380kcal.',ora:'ieri',likes:9,liked:false}
+  ];
+
+  let socialPosts = JSON.parse(localStorage.getItem('forma_social') || 'null') || [...MOCK_POSTS];
+  let postTipoSel = 'meal';
+
+  function renderFeed() {
+    const feed = document.getElementById('social-feed');
+    if(!feed) return;
+    feed.innerHTML = '';
+    if(!socialPosts.length) {
+      feed.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,.2);font-size:13px;padding:40px 0">Nessun post ancora. Sii il primo a condividere.</p>';
+      return;
+    }
+    const tipoColor = {meal:'#a3e635',workout:'#60a5fa',result:'#f87171',altro:'rgba(255,255,255,.4)'};
+    const tipoLabel = {meal:'Pasto',workout:'Allenamento',result:'Risultato',altro:'Altro'};
+    socialPosts.forEach(post => {
+      const tc = tipoColor[post.tipo] || tipoColor.altro;
+      const tl = tipoLabel[post.tipo] || 'Altro';
+      const div = document.createElement('div');
+      div.className = 'post-card';
+      div.innerHTML = `
+        <div style="padding:16px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <div class="avatar-pill" style="background:${post.colore}22;color:${post.colore}">${post.avatar}</div>
+            <div style="flex:1;min-width:0">
+              <p style="font-size:13px;font-weight:600;color:#f5f5f7">${esc(post.autore)}</p>
+              <p style="font-size:10px;color:rgba(255,255,255,.28);font-family:'Space Mono',monospace">${post.ora}</p>
+            </div>
+            <span style="font-size:9px;color:${tc};background:${tc}18;border:1px solid ${tc}30;border-radius:99px;padding:3px 10px;font-family:'Space Mono',monospace;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap">${tl}</span>
+          </div>
+          <p style="font-size:13.5px;color:rgba(255,255,255,.75);line-height:1.55;margin-bottom:12px">${esc(post.testo)}</p>
+          <div style="display:flex;align-items:center;gap:16px;padding-top:10px;border-top:1px solid rgba(255,255,255,.05)">
+            <button id="like-${post.id}" class="like-btn ${post.liked?'liked':''}" onclick="toggleLike('${post.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="${post.liked?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              <span id="likecnt-${post.id}">${post.likes}</span>
+            </button>
+          </div>
+        </div>`;
+      feed.appendChild(div);
+    });
+  }
+
+  function toggleLike(id) {
+    const post = socialPosts.find(p => p.id === id);
+    if(!post) return;
+    post.liked = !post.liked;
+    post.likes += post.liked ? 1 : -1;
+    localStorage.setItem('forma_social', JSON.stringify(socialPosts));
+    const btn = document.getElementById('like-'+id);
+    if(!btn) return;
+    btn.classList.toggle('liked', post.liked);
+    btn.querySelector('svg').setAttribute('fill', post.liked ? 'currentColor' : 'none');
+    document.getElementById('likecnt-'+id).textContent = post.likes;
+    btn.classList.add('heart-pop');
+    setTimeout(() => btn.classList.remove('heart-pop'), 300);
+  }
+
+  function openNewPost() {
+    document.getElementById('newpost-overlay').style.display = 'block';
+    document.getElementById('newpost-modal').style.display = 'block';
+    document.getElementById('newpost-txt').value = '';
+    selPostTipo('meal');
+    setTimeout(() => document.getElementById('newpost-txt').focus(), 100);
+  }
+
+  function closeNewPost() {
+    document.getElementById('newpost-overlay').style.display = 'none';
+    document.getElementById('newpost-modal').style.display = 'none';
+  }
+
+  function selPostTipo(t) {
+    postTipoSel = t;
+    ['meal','workout','result','altro'].forEach(x => {
+      const el = document.getElementById('pt-'+x);
+      if(el) el.classList.toggle('sel', x===t);
+    });
+  }
+
+  function pubblicaPost() {
+    const testo = document.getElementById('newpost-txt').value.trim();
+    if(!testo) { document.getElementById('newpost-txt').focus(); return; }
+    const p = JSON.parse(localStorage.getItem('forma_profilo') || 'null');
+    const nome = p?.nome || 'Anonimo';
+    const parts = nome.trim().split(' ');
+    const initials = (parts[0][0] + (parts[1]?.[0]||'')).toUpperCase();
+    const palette = ['#a3e635','#60a5fa','#f87171','#a78bfa','#f59e0b'];
+    const col = palette[Math.floor(Math.random()*palette.length)];
+    const newPost = {
+      id: 'u'+Date.now(),
+      autore: nome,
+      avatar: initials || 'IO',
+      colore: col,
+      tipo: postTipoSel,
+      testo,
+      ora: 'adesso',
+      likes: 0,
+      liked: false
+    };
+    socialPosts.unshift(newPost);
+    if(socialPosts.length > 50) socialPosts.pop();
+    localStorage.setItem('forma_social', JSON.stringify(socialPosts));
+    closeNewPost();
+    renderFeed();
+  }
+
+  /* ── INIT ── */
+  initHero();
+  initOnboarding();
+</script>
+</body>
+</html>
