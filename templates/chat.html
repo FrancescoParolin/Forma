@@ -185,66 +185,41 @@
             <svg style="margin-left:auto;flex-shrink:0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
 
-          <!-- Feature grid -->
-          <div style="padding:0 4px">
-            <p style="font-size:11px;font-weight:600;color:rgba(255,255,255,.22);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px">Strumenti</p>
-            <div class="grid grid-cols-3 gap-3">
-
-              <button onclick="setTab('oggi')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(163,230,53,.25)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
-                <div style="width:38px;height:38px;border-radius:12px;background:rgba(163,230,53,.1);display:flex;align-items:center;justify-content:center">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                </div>
-                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Diario<br>di oggi</p>
-              </button>
-
-              <button onclick="setTab('macro')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(96,165,250,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
-                <div style="width:38px;height:38px;border-radius:12px;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-                </div>
-                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Calcola<br>macro</p>
-              </button>
-
-              <button onclick="setTab('frigo')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(245,158,11,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
-                <div style="width:38px;height:38px;border-radius:12px;background:rgba(245,158,11,.1);display:flex;align-items:center;justify-content:center">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/><circle cx="12" cy="15" r="2"/></svg>
-                </div>
-                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Scanner<br>frigo</p>
-              </button>
-
-              <button onclick="setTab('piano')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(167,139,250,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
-                <div style="width:38px;height:38px;border-radius:12px;background:rgba(167,139,250,.1);display:flex;align-items:center;justify-content:center">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                </div>
-                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Piano<br>settimanale</p>
-              </button>
-
-              <button onclick="setTab('gym')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(248,113,113,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
-                <div style="width:38px;height:38px;border-radius:12px;background:rgba(248,113,113,.1);display:flex;align-items:center;justify-content:center">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                </div>
-                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Pasti<br>per il gym</p>
-              </button>
-
-              <button onclick="setTab('salute')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(248,113,113,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
-                <div style="width:38px;height:38px;border-radius:12px;background:rgba(248,113,113,.08);display:flex;align-items:center;justify-content:center">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                </div>
-                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Salute<br>& attività</p>
-              </button>
-
-            </div>
+          <!-- Accesso rapido — lista pulita -->
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <button onclick="setTab('oggi')" style="display:flex;align-items:center;justify-content:space-between;background:none;border:none;padding:13px 4px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);width:100%;transition:opacity .15s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">
+              <span style="font-size:15px;font-weight:500;color:#f5f5f7">Diario di oggi</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+            <button onclick="setTab('frigo')" style="display:flex;align-items:center;justify-content:space-between;background:none;border:none;padding:13px 4px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);width:100%;transition:opacity .15s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">
+              <span style="font-size:15px;font-weight:500;color:#f5f5f7">Cosa ho in frigo</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+            <button onclick="setTab('macro')" style="display:flex;align-items:center;justify-content:space-between;background:none;border:none;padding:13px 4px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);width:100%;transition:opacity .15s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">
+              <span style="font-size:15px;font-weight:500;color:#f5f5f7">Calcola i miei macro</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+            <button onclick="setTab('piano')" style="display:flex;align-items:center;justify-content:space-between;background:none;border:none;padding:13px 4px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);width:100%;transition:opacity .15s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">
+              <span style="font-size:15px;font-weight:500;color:#f5f5f7">Piano settimanale</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+            <button onclick="setTab('gym')" style="display:flex;align-items:center;justify-content:space-between;background:none;border:none;padding:13px 4px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);width:100%;transition:opacity .15s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">
+              <span style="font-size:15px;font-weight:500;color:#f5f5f7">Pasti per il gym</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+            <button onclick="setTab('salute')" style="display:flex;align-items:center;justify-content:space-between;background:none;border:none;padding:13px 4px;cursor:pointer;width:100%;transition:opacity .15s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">
+              <span style="font-size:15px;font-weight:500;color:#f5f5f7">Salute & attività</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
           </div>
 
-          <!-- Quick chips -->
-          <div style="padding:0 4px">
-            <p style="font-size:11px;font-weight:600;color:rgba(255,255,255,.22);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px">Idee rapide</p>
-            <div class="flex gap-2 flex-wrap">
-              <button class="chip" onclick="invia('Ricetta alta proteina post allenamento, 40g proteine almeno, con macro')">Post-workout</button>
-              <button class="chip" onclick="invia('Colazione per chi vuole definizione muscolare, con macro complete')">Colazione fit</button>
-              <button class="chip" onclick="invia('Pranzo per massa muscolare, ricco di carboidrati e proteine, con macro')">Pranzo massa</button>
-              <button class="chip" onclick="invia('Cena leggera per definizione, poche calorie alta proteina, con macro')">Cena light</button>
-              <button class="chip" onclick="invia('Meal prep domenicale per 5 giorni, obiettivo massa, con macro totali')">Meal prep</button>
-            </div>
+          <!-- Chips -->
+          <div class="flex gap-2 flex-wrap" style="padding:0 4px">
+            <button class="chip" onclick="invia('Ricetta alta proteina post allenamento, 40g proteine almeno, con macro')">Post-workout</button>
+            <button class="chip" onclick="invia('Colazione per definizione muscolare, con macro complete')">Colazione fit</button>
+            <button class="chip" onclick="invia('Pranzo massa, ricco di carboidrati e proteine, con macro')">Pranzo massa</button>
+            <button class="chip" onclick="invia('Cena leggera definizione, poche calorie alta proteina, con macro')">Cena light</button>
+            <button class="chip" onclick="invia('Meal prep domenicale 5 giorni obiettivo massa, con macro totali')">Meal prep</button>
           </div>
 
         </div>
