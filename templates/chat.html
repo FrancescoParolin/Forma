@@ -106,9 +106,9 @@
     @keyframes ringIn{from{stroke-dashoffset:var(--full)}to{stroke-dashoffset:var(--offset)}}
 
     /* Social feed */
-    .post-card{background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;overflow:hidden;transition:border-color .2s}
-    .post-card:hover{border-color:rgba(255,255,255,.13)}
-    .avatar-pill{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;font-family:'Inter',sans-serif;flex-shrink:0}
+    .post-card{background:#111;border:1px solid rgba(255,255,255,.07);border-radius:22px;overflow:hidden;transition:border-color .2s}
+    .post-card:hover{border-color:rgba(255,255,255,.14)}
+    .avatar-pill{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;font-family:'Inter',sans-serif;flex-shrink:0}
     .like-btn{display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.3);font-size:12px;font-family:'Inter',sans-serif;font-weight:500;transition:color .15s;padding:0}
     .like-btn.liked{color:#f87171}
     .like-btn:hover{color:#f87171}
@@ -185,13 +185,66 @@
             <svg style="margin-left:auto;flex-shrink:0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
 
+          <!-- Feature grid -->
+          <div style="padding:0 4px">
+            <p style="font-size:11px;font-weight:600;color:rgba(255,255,255,.22);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px">Strumenti</p>
+            <div class="grid grid-cols-3 gap-3">
+
+              <button onclick="setTab('oggi')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(163,230,53,.25)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
+                <div style="width:38px;height:38px;border-radius:12px;background:rgba(163,230,53,.1);display:flex;align-items:center;justify-content:center">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Diario<br>di oggi</p>
+              </button>
+
+              <button onclick="setTab('macro')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(96,165,250,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
+                <div style="width:38px;height:38px;border-radius:12px;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                </div>
+                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Calcola<br>macro</p>
+              </button>
+
+              <button onclick="setTab('frigo')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(245,158,11,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
+                <div style="width:38px;height:38px;border-radius:12px;background:rgba(245,158,11,.1);display:flex;align-items:center;justify-content:center">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/><circle cx="12" cy="15" r="2"/></svg>
+                </div>
+                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Scanner<br>frigo</p>
+              </button>
+
+              <button onclick="setTab('piano')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(167,139,250,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
+                <div style="width:38px;height:38px;border-radius:12px;background:rgba(167,139,250,.1);display:flex;align-items:center;justify-content:center">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Piano<br>settimanale</p>
+              </button>
+
+              <button onclick="setTab('gym')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(248,113,113,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
+                <div style="width:38px;height:38px;border-radius:12px;background:rgba(248,113,113,.1);display:flex;align-items:center;justify-content:center">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Pasti<br>per il gym</p>
+              </button>
+
+              <button onclick="setTab('salute')" style="background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .2s;width:100%" onmouseover="this.style.borderColor='rgba(248,113,113,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
+                <div style="width:38px;height:38px;border-radius:12px;background:rgba(248,113,113,.08);display:flex;align-items:center;justify-content:center">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </div>
+                <p style="font-size:13px;font-weight:600;color:#f5f5f7;letter-spacing:-.1px;line-height:1.2">Salute<br>& attività</p>
+              </button>
+
+            </div>
+          </div>
+
           <!-- Quick chips -->
-          <div class="flex gap-2 flex-wrap" style="padding:0 4px">
-            <button class="chip" onclick="invia('Ricetta alta proteina post allenamento, 40g proteine almeno, con macro')">Post-workout</button>
-            <button class="chip" onclick="invia('Colazione per chi vuole definizione muscolare, con macro complete')">Colazione fit</button>
-            <button class="chip" onclick="invia('Pranzo per massa muscolare, ricco di carboidrati e proteine, con macro')">Pranzo massa</button>
-            <button class="chip" onclick="invia('Cena leggera per definizione, poche calorie alta proteina, con macro')">Cena light</button>
-            <button class="chip" onclick="invia('Meal prep domenicale per 5 giorni, obiettivo massa, con macro totali')">Meal prep</button>
+          <div style="padding:0 4px">
+            <p style="font-size:11px;font-weight:600;color:rgba(255,255,255,.22);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px">Idee rapide</p>
+            <div class="flex gap-2 flex-wrap">
+              <button class="chip" onclick="invia('Ricetta alta proteina post allenamento, 40g proteine almeno, con macro')">Post-workout</button>
+              <button class="chip" onclick="invia('Colazione per chi vuole definizione muscolare, con macro complete')">Colazione fit</button>
+              <button class="chip" onclick="invia('Pranzo per massa muscolare, ricco di carboidrati e proteine, con macro')">Pranzo massa</button>
+              <button class="chip" onclick="invia('Cena leggera per definizione, poche calorie alta proteina, con macro')">Cena light</button>
+              <button class="chip" onclick="invia('Meal prep domenicale per 5 giorni, obiettivo massa, con macro totali')">Meal prep</button>
+            </div>
           </div>
 
         </div>
@@ -363,16 +416,56 @@
 
     <!-- ── TAB OGGI ── -->
     <div id="view-oggi" class="hidden px-4 py-5 flex flex-col gap-4">
-      <div class="card p-4 flex flex-col gap-3">
+      <div class="card p-5 flex flex-col gap-4">
         <div class="flex items-center justify-between">
           <div>
-            <p style="font-size:20px;font-weight:600;color:#f5f5f7;letter-spacing:-.3px">Oggi</p>
-            <p id="oggi-data" style="color:rgba(255,255,255,.32);font-size:13px;margin-top:3px"></p>
+            <p style="font-size:22px;font-weight:700;color:#f5f5f7;letter-spacing:-.5px">Oggi</p>
+            <p id="oggi-data" style="color:rgba(255,255,255,.3);font-size:13px;margin-top:2px"></p>
           </div>
-          <button onclick="resetDiario()" style="font-size:10px;color:rgba(255,255,255,.2);background:none;border:none;cursor:pointer;font-family:'Space Mono',monospace" onmouseover="this.style.color='#6a8a6a'" onmouseout="this.style.color='#2d3d2d'">RESET</button>
+          <button onclick="resetDiario()" style="font-size:11px;color:rgba(255,255,255,.18);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:color .15s" onmouseover="this.style.color='rgba(255,255,255,.4)'" onmouseout="this.style.color='rgba(255,255,255,.18)'">Azzera</button>
         </div>
-        <!-- Barre macro -->
-        <div class="flex flex-col gap-3" id="macro-bars">
+
+        <!-- Ring kcal + macro pillole -->
+        <div class="flex items-center gap-5">
+          <div style="position:relative;width:88px;height:88px;flex-shrink:0">
+            <svg viewBox="0 0 88 88" style="transform:rotate(-90deg);width:88px;height:88px">
+              <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(163,230,53,.1)" stroke-width="7"/>
+              <circle cx="44" cy="44" r="36" fill="none" stroke="#a3e635" stroke-width="7" stroke-linecap="round"
+                id="oggi-ring" style="stroke-dasharray:226;stroke-dashoffset:226;transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1)"/>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+              <p id="oggi-ring-pct" style="font-size:16px;font-weight:700;color:#f5f5f7;letter-spacing:-1px;line-height:1">0%</p>
+              <p style="font-size:9px;color:rgba(255,255,255,.3);margin-top:1px">kcal</p>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2 flex-1">
+            <div class="flex items-center justify-between">
+              <span style="font-size:12px;color:rgba(255,255,255,.4);font-weight:500">Proteine</span>
+              <span id="bar-prot-txt" style="font-size:12px;color:#60a5fa;font-weight:600;font-family:'Inter',sans-serif">0g / —</span>
+            </div>
+            <div class="bar-bg"><div id="bar-prot" class="bar-fill" style="width:0%;background:linear-gradient(90deg,#60a5fa,#3b82f6)"></div></div>
+            <div class="flex items-center justify-between">
+              <span style="font-size:12px;color:rgba(255,255,255,.4);font-weight:500">Carboidrati</span>
+              <span id="bar-carb-txt" style="font-size:12px;color:#f59e0b;font-weight:600;font-family:'Inter',sans-serif">0g / —</span>
+            </div>
+            <div class="bar-bg"><div id="bar-carb" class="bar-fill" style="width:0%;background:linear-gradient(90deg,#f59e0b,#d97706)"></div></div>
+            <div class="flex items-center justify-between">
+              <span style="font-size:12px;color:rgba(255,255,255,.4);font-weight:500">Grassi</span>
+              <span id="bar-grassi-txt" style="font-size:12px;color:#f87171;font-weight:600;font-family:'Inter',sans-serif">0g / —</span>
+            </div>
+            <div class="bar-bg"><div id="bar-grassi" class="bar-fill" style="width:0%;background:linear-gradient(90deg,#f87171,#ef4444)"></div></div>
+          </div>
+        </div>
+
+        <!-- Kcal totale sotto il ring -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(163,230,53,.05);border:1px solid rgba(163,230,53,.1);border-radius:14px">
+          <span style="font-size:13px;color:rgba(255,255,255,.45);font-weight:500">Calorie oggi</span>
+          <span id="bar-kcal-txt" style="font-size:18px;font-weight:700;color:#a3e635;letter-spacing:-.5px">0 / — kcal</span>
+        </div>
+
+        <!-- Barre kcal nascosta (aggiornata da JS) -->
+        <div style="display:none"><div class="bar-bg"><div id="bar-kcal" class="bar-fill" style="width:0%"></div></div></div>
+      </div>
           <div>
             <div class="flex justify-between mb-1"><span style="font-size:11px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">KCAL</span><span id="bar-kcal-txt" style="font-size:11px;color:#a3e635;font-family:'Space Mono',monospace">0 / —</span></div>
             <div class="bar-bg"><div id="bar-kcal" class="bar-fill" style="width:0%"></div></div>
@@ -1022,6 +1115,11 @@
     document.getElementById('bar-prot-txt').textContent = `${totali.prot}g / ${tP?tP+'g':'—'}`;
     document.getElementById('bar-carb-txt').textContent = `${totali.carb}g / ${tC?tC+'g':'—'}`;
     document.getElementById('bar-grassi-txt').textContent = `${totali.grassi}g / ${tG?tG+'g':'—'}`;
+    // Ring kcal
+    const pctK = tK ? Math.min(totali.kcal/tK, 1) : 0;
+    const pctLabel = tK ? Math.round(pctK*100)+'%' : (totali.kcal>0?totali.kcal:'0');
+    document.getElementById('oggi-ring').style.strokeDashoffset = 226 - pctK*226;
+    document.getElementById('oggi-ring-pct').textContent = tK ? pctLabel : totali.kcal||'0';
 
     const lista = document.getElementById('lista-pasti');
     lista.innerHTML = d.pasti.length === 0
