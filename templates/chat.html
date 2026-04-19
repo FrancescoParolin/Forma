@@ -506,6 +506,16 @@
         </div>
       </div>
 
+      <!-- Peso rapido -->
+      <div class="card p-4 flex items-center gap-3">
+        <div style="flex:1">
+          <p style="font-size:10px;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace">Peso oggi</p>
+          <p id="oggi-peso-disp" style="font-size:22px;font-weight:700;color:#f5f5f7;letter-spacing:-1px;margin-top:3px">—</p>
+        </div>
+        <input id="oggi-peso-input" type="number" step="0.1" placeholder="kg" style="width:80px;background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:9px 10px;border-radius:10px;font-size:15px;font-family:'Space Mono',monospace;outline:none;text-align:center" onkeydown="if(event.key==='Enter')salvaOggiPeso()">
+        <button onclick="salvaOggiPeso()" style="background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.2);color:#a3e635;padding:9px 16px;border-radius:10px;font-size:12px;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s" onmouseover="this.style.background='rgba(163,230,53,.18)'" onmouseout="this.style.background='rgba(163,230,53,.1)'">Salva</button>
+      </div>
+
       <!-- Aggiungi pasto -->
       <div class="card p-4 flex flex-col gap-3">
         <div class="flex items-center justify-between">
@@ -796,6 +806,110 @@
 
     </div>
 
+    <!-- ── TAB PROGRESSO ── -->
+    <div id="view-progresso" class="hidden px-4 py-5 flex flex-col gap-4">
+
+      <!-- Header percorso -->
+      <div style="background:linear-gradient(140deg,#0d1a0d,#141f14);border:1px solid rgba(163,230,53,.18);border-radius:22px;padding:22px 20px">
+        <div class="flex items-center justify-between mb-1">
+          <p style="font-size:11px;color:rgba(163,230,53,.6);letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">Il tuo percorso</p>
+          <span id="prog-obiettivo" style="font-size:10px;color:#a3e635;background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.3);border-radius:99px;padding:3px 10px;font-family:'Space Mono',monospace;letter-spacing:.5px"></span>
+        </div>
+        <div class="flex items-end justify-between">
+          <div>
+            <p style="font-size:52px;font-weight:700;color:#f5f5f7;letter-spacing:-3px;line-height:1">Giorno <span id="prog-giorni">1</span></p>
+            <p id="prog-start-date" style="font-size:12px;color:rgba(255,255,255,.3);margin-top:4px"></p>
+          </div>
+          <div style="text-align:right">
+            <p id="prog-peso-delta" style="font-size:15px;font-weight:600;color:rgba(255,255,255,.4)"></p>
+            <p style="font-size:10px;color:rgba(255,255,255,.22);margin-top:2px">vs inizio</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peso tracker -->
+      <div class="card p-5 flex flex-col gap-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <p style="font-size:11px;color:rgba(255,255,255,.35);letter-spacing:1px;text-transform:uppercase;font-family:'Space Mono',monospace">Peso</p>
+            <p id="prog-peso-val" style="font-size:36px;font-weight:700;color:#f5f5f7;letter-spacing:-2px;line-height:1.1;margin-top:4px">—</p>
+          </div>
+          <!-- 30-day sparkline -->
+          <div id="peso-chart" style="display:flex;align-items:flex-end;gap:2px;height:52px;width:120px"></div>
+        </div>
+        <div class="flex gap-2">
+          <input id="prog-peso-input" type="number" step="0.1" placeholder="Peso oggi (kg)" style="flex:1;background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 14px;border-radius:10px;font-size:14px;font-family:'Space Mono',monospace;outline:none">
+          <button onclick="salvaPesoOggi()" style="background:linear-gradient(135deg,#a3e635,#65a30d);color:#000;font-weight:700;border:none;border-radius:10px;padding:10px 20px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;white-space:nowrap">Salva</button>
+        </div>
+      </div>
+
+      <!-- Misure corporee -->
+      <div class="card p-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <p style="font-size:15px;font-weight:600;color:#f5f5f7;letter-spacing:-.2px">Misure corporee</p>
+          <button onclick="toggleMisureForm()" id="misure-toggle-btn" style="font-size:11px;color:#a3e635;background:rgba(163,230,53,.08);border:1px solid rgba(163,230,53,.2);border-radius:99px;padding:5px 14px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;transition:all .15s">Aggiorna</button>
+        </div>
+        <div id="misure-display"></div>
+        <!-- Form nascosto -->
+        <div id="misure-form" style="display:none;margin-top:4px">
+          <div class="grid grid-cols-2 gap-2 mb-3">
+            <div><label style="font-size:9px;color:rgba(255,255,255,.3);font-family:'Space Mono',monospace">VITA cm</label><input id="mis-vita" type="number" step="0.5" placeholder="82" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:9px 10px;border-radius:8px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:3px"></div>
+            <div><label style="font-size:9px;color:rgba(255,255,255,.3);font-family:'Space Mono',monospace">PETTO cm</label><input id="mis-petto" type="number" step="0.5" placeholder="100" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:9px 10px;border-radius:8px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:3px"></div>
+            <div><label style="font-size:9px;color:rgba(255,255,255,.3);font-family:'Space Mono',monospace">BRACCIO cm</label><input id="mis-braccio" type="number" step="0.5" placeholder="35" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:9px 10px;border-radius:8px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:3px"></div>
+            <div><label style="font-size:9px;color:rgba(255,255,255,.3);font-family:'Space Mono',monospace">COSCIA cm</label><input id="mis-coscia" type="number" step="0.5" placeholder="57" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:9px 10px;border-radius:8px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:3px"></div>
+            <div class="col-span-2"><label style="font-size:9px;color:rgba(255,255,255,.3);font-family:'Space Mono',monospace">FIANCHI cm</label><input id="mis-fianchi" type="number" step="0.5" placeholder="96" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:9px 10px;border-radius:8px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:3px"></div>
+          </div>
+          <button class="btn-primary" onclick="salvaMisure()">SALVA MISURE</button>
+        </div>
+      </div>
+
+      <!-- Check-in benessere -->
+      <div class="card p-4 flex flex-col gap-4">
+        <p style="font-size:15px;font-weight:600;color:#f5f5f7;letter-spacing:-.2px">Check-in oggi</p>
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <span style="font-size:13px;color:rgba(255,255,255,.5);width:100px">Energia</span>
+            <div class="flex gap-2">
+              <button id="ck-energia-1" onclick="selCheck('energia',1)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(163,230,53,.2);background:rgba(163,230,53,.08);color:#a3e635;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">1</button>
+              <button id="ck-energia-2" onclick="selCheck('energia',2)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(163,230,53,.2);background:rgba(163,230,53,.08);color:#a3e635;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">2</button>
+              <button id="ck-energia-3" onclick="selCheck('energia',3)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(163,230,53,.2);background:rgba(163,230,53,.08);color:#a3e635;font-size:12px;font-weight:700;cursor:pointer;opacity:1;font-family:'Space Mono',monospace;transition:opacity .15s">3</button>
+              <button id="ck-energia-4" onclick="selCheck('energia',4)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(163,230,53,.2);background:rgba(163,230,53,.08);color:#a3e635;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">4</button>
+              <button id="ck-energia-5" onclick="selCheck('energia',5)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(163,230,53,.2);background:rgba(163,230,53,.08);color:#a3e635;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">5</button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span style="font-size:13px;color:rgba(255,255,255,.5);width:100px">Recupero</span>
+            <div class="flex gap-2">
+              <button id="ck-recupero-1" onclick="selCheck('recupero',1)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(96,165,250,.2);background:rgba(96,165,250,.08);color:#60a5fa;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">1</button>
+              <button id="ck-recupero-2" onclick="selCheck('recupero',2)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(96,165,250,.2);background:rgba(96,165,250,.08);color:#60a5fa;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">2</button>
+              <button id="ck-recupero-3" onclick="selCheck('recupero',3)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(96,165,250,.2);background:rgba(96,165,250,.08);color:#60a5fa;font-size:12px;font-weight:700;cursor:pointer;opacity:1;font-family:'Space Mono',monospace;transition:opacity .15s">3</button>
+              <button id="ck-recupero-4" onclick="selCheck('recupero',4)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(96,165,250,.2);background:rgba(96,165,250,.08);color:#60a5fa;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">4</button>
+              <button id="ck-recupero-5" onclick="selCheck('recupero',5)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(96,165,250,.2);background:rgba(96,165,250,.08);color:#60a5fa;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">5</button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span style="font-size:13px;color:rgba(255,255,255,.5);width:100px">Motivazione</span>
+            <div class="flex gap-2">
+              <button id="ck-motivazione-1" onclick="selCheck('motivazione',1)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(167,139,250,.2);background:rgba(167,139,250,.08);color:#a78bfa;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">1</button>
+              <button id="ck-motivazione-2" onclick="selCheck('motivazione',2)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(167,139,250,.2);background:rgba(167,139,250,.08);color:#a78bfa;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">2</button>
+              <button id="ck-motivazione-3" onclick="selCheck('motivazione',3)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(167,139,250,.2);background:rgba(167,139,250,.08);color:#a78bfa;font-size:12px;font-weight:700;cursor:pointer;opacity:1;font-family:'Space Mono',monospace;transition:opacity .15s">3</button>
+              <button id="ck-motivazione-4" onclick="selCheck('motivazione',4)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(167,139,250,.2);background:rgba(167,139,250,.08);color:#a78bfa;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">4</button>
+              <button id="ck-motivazione-5" onclick="selCheck('motivazione',5)" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(167,139,250,.2);background:rgba(167,139,250,.08);color:#a78bfa;font-size:12px;font-weight:700;cursor:pointer;opacity:.3;font-family:'Space Mono',monospace;transition:opacity .15s">5</button>
+            </div>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="salvaCheck()">SALVA CHECK-IN</button>
+        <div id="check-saved" style="display:none;text-align:center;font-size:12px;color:#a3e635;font-family:'Space Mono',monospace">Salvato.</div>
+      </div>
+
+      <!-- Analisi AI -->
+      <button class="card p-4 text-left w-full card-action" onclick="analisiCompleta()">
+        <p style="font-size:13px;color:#a3e635;font-family:'Space Mono',monospace;letter-spacing:.5px">Analisi completa AI →</p>
+        <p style="font-size:12px;color:rgba(255,255,255,.32);margin-top:5px;line-height:1.4">Report personalizzato su peso, misure, sonno, calorie e benessere dal giorno 1</p>
+      </button>
+
+    </div>
+
   </div><!-- end main -->
 
   <!-- FOTO MODAL -->
@@ -903,11 +1017,20 @@
       <p style="color:#a3e635;font-size:10px;letter-spacing:2px;font-family:'Space Mono',monospace;margin-bottom:8px">ALLENAMENTO</p>
       <p style="font-size:24px;font-weight:700;color:#f5f5f7;letter-spacing:-.5px;margin-bottom:24px;line-height:1.1">Quante volte ti alleni?</p>
       <div class="flex flex-col gap-3">
-        <button onclick="selOnboardAtt('sedentario');finiOnboard()" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">Non mi alleno</button>
-        <button onclick="selOnboardAtt('leggero');finiOnboard()" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">1–3 volte a settimana</button>
-        <button onclick="selOnboardAtt('moderato');finiOnboard()" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">3–5 volte a settimana</button>
-        <button onclick="selOnboardAtt('intenso');finiOnboard()" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">6–7 volte a settimana</button>
+        <button onclick="selOnboardAtt('sedentario');nextOnboard(4)" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">Non mi alleno</button>
+        <button onclick="selOnboardAtt('leggero');nextOnboard(4)" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">1–3 volte a settimana</button>
+        <button onclick="selOnboardAtt('moderato');nextOnboard(4)" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">3–5 volte a settimana</button>
+        <button onclick="selOnboardAtt('intenso');nextOnboard(4)" style="padding:16px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#c8e0c8;font-size:15px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(163,230,53,.4)'" onmouseout="this.style.borderColor='#1a221a'">6–7 volte a settimana</button>
       </div>
+    </div>
+    <div id="onboard-step-4" style="display:none">
+      <p style="color:#a3e635;font-size:10px;letter-spacing:2px;font-family:'Space Mono',monospace;margin-bottom:8px">PUNTO DI PARTENZA</p>
+      <p style="font-size:24px;font-weight:700;color:#f5f5f7;letter-spacing:-.5px;margin-bottom:8px;line-height:1.1">Qual è il tuo peso?</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.3);margin-bottom:24px;line-height:1.4">Serve per misurare i tuoi progressi reali nel tempo.</p>
+      <input id="ob-peso" type="number" step="0.1" placeholder="es. 75.5" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:14px 16px;border-radius:14px;font-size:20px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-bottom:6px;text-align:center" onkeydown="if(event.key==='Enter')finiOnboard()">
+      <p style="font-size:11px;color:rgba(255,255,255,.2);text-align:center;margin-bottom:16px">kg</p>
+      <button class="btn-primary" onclick="finiOnboard()">Inizia il percorso</button>
+      <button onclick="finiOnboard()" style="display:block;width:100%;margin-top:10px;background:none;border:none;color:rgba(255,255,255,.2);font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;padding:6px">Salta</button>
     </div>
   </div>
 
@@ -942,6 +1065,10 @@
   <div id="more-menu" style="display:none;position:fixed;bottom:74px;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:656px;background:#111;border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 0 0;padding:20px 16px 8px;z-index:32">
     <div style="width:36px;height:3px;background:#2d3d2d;border-radius:99px;margin:0 auto 16px"></div>
     <div class="grid grid-cols-3 gap-2">
+      <button onclick="setTab('progresso');closeMoreNav()" class="more-btn" style="border-color:rgba(163,230,53,.15);color:#a3e635">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+        <span>Progresso</span>
+      </button>
       <button onclick="setTab('macro');closeMoreNav()" class="more-btn">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
         <span>Macro</span>
@@ -1056,7 +1183,7 @@
 
   /* TABS */
   function setTab(t) {
-    ['chat','oggi','macro','frigo','gym','piano','profilo','salvate','salute','sonno'].forEach(id =>
+    ['chat','oggi','macro','frigo','gym','piano','profilo','salvate','salute','sonno','progresso'].forEach(id =>
       document.getElementById('view-'+id).classList.add('hidden')
     );
     ['chat','oggi','salute','sonno','more'].forEach(id => {
@@ -1068,7 +1195,7 @@
     view.classList.add('tab-enter');
     setTimeout(() => view.classList.remove('tab-enter'), 250);
     // Activate bottom nav button
-    const navMap = {chat:'chat',oggi:'oggi',salute:'salute',sonno:'sonno',macro:'more',gym:'more',frigo:'more',piano:'more',profilo:'more',salvate:'more'};
+    const navMap = {chat:'chat',oggi:'oggi',salute:'salute',sonno:'sonno',macro:'more',gym:'more',frigo:'more',piano:'more',profilo:'more',salvate:'more',progresso:'more'};
     const navBtn = document.getElementById('nav-'+(navMap[t]||t));
     if(navBtn) navBtn.classList.add('active');
     if(t==='salvate') renderSaved();
@@ -1077,6 +1204,7 @@
     if(t==='profilo') caricaProfilo();
     if(t==='salute') renderSalute();
     if(t==='sonno') renderSonno();
+    if(t==='progresso') renderProgresso();
     if(t==='chat') document.getElementById('input').focus();
   }
 
@@ -1189,12 +1317,26 @@
     renderDiario();
   }
 
+  function salvaOggiPeso(){
+    const input=document.getElementById('oggi-peso-input');
+    const val=parseFloat(input.value);
+    if(!val||val<20||val>400) return;
+    localStorage.setItem('forma_peso_'+new Date().toISOString().slice(0,10),JSON.stringify({peso:val}));
+    document.getElementById('oggi-peso-disp').textContent=val+' kg';
+    input.value='';
+  }
+
   function renderDiario() {
     const d = getDiario();
     const p = JSON.parse(localStorage.getItem('forma_profilo') || 'null');
     const totali = d.pasti.reduce((acc,p) => ({kcal:acc.kcal+p.kcal,prot:acc.prot+p.prot,carb:acc.carb+p.carb,grassi:acc.grassi+p.grassi}), {kcal:0,prot:0,carb:0,grassi:0});
 
     document.getElementById('oggi-data').textContent = new Date().toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'});
+
+    // Carica peso di oggi se già salvato
+    const pesoOggi=JSON.parse(localStorage.getItem('forma_peso_'+new Date().toISOString().slice(0,10))||'null');
+    const pdEl=document.getElementById('oggi-peso-disp');
+    if(pdEl) pdEl.textContent=pesoOggi?.peso?pesoOggi.peso+' kg':'—';
 
     const perc = (v, t) => t ? Math.min(Math.round(v/t*100),100) : 0;
     const tK = p?.kcal, tP = p?.prot, tC = p?.carb, tG = p?.grassi;
@@ -1662,6 +1804,9 @@
   let obNome='', obObj='massa', obAtt='leggero';
 
   function initOnboarding(){
+    // Registra sempre il giorno di inizio (anche se l'utente salta)
+    if(!localStorage.getItem('forma_first_use'))
+      localStorage.setItem('forma_first_use', new Date().toISOString().slice(0,10));
     const p=JSON.parse(localStorage.getItem('forma_profilo')||'null');
     if(p?.nome) return;
     document.getElementById('onboard-overlay').style.display='block';
@@ -1674,15 +1819,23 @@
       if(!nome){ document.getElementById('ob-nome').focus(); return; }
       obNome=nome;
     }
-    [1,2,3].forEach(s=>
+    [1,2,3,4].forEach(s=>
       document.getElementById('onboard-step-'+s).style.display=s===toStep?'block':'none'
     );
+    if(toStep===4) setTimeout(()=>document.getElementById('ob-peso')?.focus(),100);
   }
   function selOnboardObj(v){ obObj=v; }
   function selOnboardAtt(v){ obAtt=v; }
   function finiOnboard(){
     const p={nome:obNome,obiettivo:obObj,attivita:obAtt,sesso:'M',peso:0,altezza:0,eta:0};
     localStorage.setItem('forma_profilo',JSON.stringify(p));
+    // Salva peso baseline
+    const pesoEl = document.getElementById('ob-peso');
+    const pesoVal = pesoEl ? parseFloat(pesoEl.value) : 0;
+    if(pesoVal > 0) {
+      localStorage.setItem('forma_peso_'+new Date().toISOString().slice(0,10),
+        JSON.stringify({ peso: pesoVal }));
+    }
     document.getElementById('onboard-overlay').style.display='none';
     document.getElementById('onboard-modal').style.display='none';
     initHero();
@@ -1905,6 +2058,248 @@
       const d = s.data.toLocaleDateString('it-IT', {weekday:'short'});
       return `${d}: ${s.rec.ore}h qualità ${s.rec.qualita}/5`;
     }).join(', ');
+  }
+
+  /* ── PROGRESSO ── */
+  let checkEnergia=3, checkRecupero=3, checkMotivazione=3;
+  let misureFormVisible=false;
+
+  function getFirstUse(){
+    let d=localStorage.getItem('forma_first_use');
+    if(!d){ d=new Date().toISOString().slice(0,10); localStorage.setItem('forma_first_use',d); }
+    return d;
+  }
+  function giorniPercorso(){
+    const start=new Date(getFirstUse()), oggi=new Date();
+    return Math.floor((oggi-start)/(1000*60*60*24))+1;
+  }
+  function getPesoKey(date){ const d=date||new Date(); return 'forma_peso_'+d.toISOString().slice(0,10); }
+  function getMisureKey(date){ const d=date||new Date(); return 'forma_misure_'+d.toISOString().slice(0,10); }
+
+  function getPesiUltimi(n){
+    const entries=[];
+    for(let i=n-1;i>=0;i--){
+      const d=new Date(); d.setDate(d.getDate()-i);
+      const v=JSON.parse(localStorage.getItem(getPesoKey(d))||'null');
+      entries.push({data:d,peso:v?.peso||null});
+    }
+    return entries;
+  }
+  function getPesoBaseline(){
+    const fd=getFirstUse();
+    for(let i=0;i<14;i++){
+      const d=new Date(fd); d.setDate(d.getDate()+i);
+      const v=JSON.parse(localStorage.getItem(getPesoKey(d))||'null');
+      if(v?.peso) return v.peso;
+    }
+    return null;
+  }
+  function getPesoLatest(){
+    for(let i=0;i<90;i++){
+      const d=new Date(); d.setDate(d.getDate()-i);
+      const v=JSON.parse(localStorage.getItem(getPesoKey(d))||'null');
+      if(v?.peso) return {peso:v.peso,data:d.toISOString().slice(0,10)};
+    }
+    return null;
+  }
+  function getMisureBaseline(){
+    const fd=getFirstUse();
+    for(let i=0;i<30;i++){
+      const d=new Date(fd); d.setDate(d.getDate()+i);
+      const v=JSON.parse(localStorage.getItem(getMisureKey(d))||'null');
+      if(v) return v;
+    }
+    return null;
+  }
+  function getMisureLatest(){
+    for(let i=0;i<180;i++){
+      const d=new Date(); d.setDate(d.getDate()-i);
+      const v=JSON.parse(localStorage.getItem(getMisureKey(d))||'null');
+      if(v) return v;
+    }
+    return null;
+  }
+
+  function salvaPesoOggi(){
+    const input=document.getElementById('prog-peso-input');
+    const val=parseFloat(input.value);
+    if(!val||val<20||val>400) return;
+    localStorage.setItem(getPesoKey(),JSON.stringify({peso:val}));
+    input.value='';
+    renderProgresso();
+  }
+
+  function toggleMisureForm(){
+    misureFormVisible=!misureFormVisible;
+    document.getElementById('misure-form').style.display=misureFormVisible?'block':'none';
+    document.getElementById('misure-toggle-btn').textContent=misureFormVisible?'Chiudi':'Aggiorna';
+    if(misureFormVisible){
+      const latest=getMisureLatest();
+      if(latest){
+        ['vita','petto','braccio','coscia','fianchi'].forEach(k=>{
+          const el=document.getElementById('mis-'+k);
+          if(el&&latest[k]) el.value=latest[k];
+        });
+      }
+    }
+  }
+
+  function salvaMisure(){
+    const mis={
+      vita:   parseFloat(document.getElementById('mis-vita').value)||0,
+      petto:  parseFloat(document.getElementById('mis-petto').value)||0,
+      braccio:parseFloat(document.getElementById('mis-braccio').value)||0,
+      coscia: parseFloat(document.getElementById('mis-coscia').value)||0,
+      fianchi:parseFloat(document.getElementById('mis-fianchi').value)||0,
+    };
+    if(!Object.values(mis).some(v=>v>0)) return;
+    localStorage.setItem(getMisureKey(),JSON.stringify(mis));
+    misureFormVisible=false;
+    document.getElementById('misure-form').style.display='none';
+    document.getElementById('misure-toggle-btn').textContent='Aggiorna';
+    renderProgresso();
+  }
+
+  function selCheck(tipo,v){
+    if(tipo==='energia') checkEnergia=v;
+    if(tipo==='recupero') checkRecupero=v;
+    if(tipo==='motivazione') checkMotivazione=v;
+    [1,2,3,4,5].forEach(i=>{
+      const el=document.getElementById('ck-'+tipo+'-'+i);
+      if(el) el.style.opacity=i<=v?'1':'0.2';
+    });
+  }
+
+  function salvaCheck(){
+    localStorage.setItem('forma_check_'+new Date().toISOString().slice(0,10),
+      JSON.stringify({energia:checkEnergia,recupero:checkRecupero,motivazione:checkMotivazione}));
+    const fb=document.getElementById('check-saved');
+    fb.style.display='block';
+    setTimeout(()=>fb.style.display='none',2000);
+  }
+
+  function renderProgresso(){
+    // Header
+    document.getElementById('prog-giorni').textContent=giorniPercorso();
+    document.getElementById('prog-start-date').textContent=
+      'Dal '+new Date(getFirstUse()).toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'});
+    const p=JSON.parse(localStorage.getItem('forma_profilo')||'null');
+    const objEl=document.getElementById('prog-obiettivo');
+    if(objEl){
+      const labels={massa:'Massa',definizione:'Definizione',mantenimento:'Mantenimento'};
+      objEl.textContent=labels[p?.obiettivo]||'';
+    }
+    // Peso
+    const pesiUltimi30=getPesiUltimi(30);
+    const pesoLatest=getPesoLatest();
+    const pesoBaseline=getPesoBaseline();
+    document.getElementById('prog-peso-val').textContent=pesoLatest?pesoLatest.peso+' kg':'— kg';
+    const deltaEl=document.getElementById('prog-peso-delta');
+    if(pesoLatest&&pesoBaseline){
+      const delta=Math.round((pesoLatest.peso-pesoBaseline)*10)/10;
+      deltaEl.textContent=(delta>0?'+':'')+delta+' kg';
+      const obj=p?.obiettivo;
+      deltaEl.style.color=delta===0?'rgba(255,255,255,.35)':
+        (obj==='definizione'?(delta<0?'#a3e635':'#f87171'):
+        (obj==='massa'?(delta>0?'#a3e635':'#f87171'):'#f59e0b'));
+    } else { deltaEl.textContent=''; }
+    // Sparkline peso 30 giorni
+    const chartEl=document.getElementById('peso-chart');
+    if(chartEl){
+      chartEl.innerHTML='';
+      const valori=pesiUltimi30.filter(e=>e.peso!==null).map(e=>e.peso);
+      const minV=valori.length?Math.min(...valori)-0.5:60;
+      const maxV=valori.length?Math.max(...valori)+0.5:100;
+      const range=maxV-minV||1;
+      pesiUltimi30.forEach((e,i)=>{
+        const pct=e.peso!==null?Math.max((e.peso-minV)/range*100,5):0;
+        const isOggi=i===29;
+        const col=document.createElement('div');
+        col.style.cssText='flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%';
+        col.innerHTML=`<div style="width:100%;height:${pct}%;min-height:${e.peso?2:0}px;background:${e.peso?(isOggi?'#a3e635':'rgba(163,230,53,.3)'):'transparent'};border-radius:2px 2px 0 0;transition:height .5s ease"></div>`;
+        chartEl.appendChild(col);
+      });
+    }
+    // Misure
+    renderMisureDisplay();
+    // Check-in
+    const ck=JSON.parse(localStorage.getItem('forma_check_'+new Date().toISOString().slice(0,10))||'null');
+    if(ck){
+      selCheck('energia',ck.energia);
+      selCheck('recupero',ck.recupero);
+      selCheck('motivazione',ck.motivazione);
+    }
+  }
+
+  function renderMisureDisplay(){
+    const LABELS={vita:'Vita',petto:'Petto',braccio:'Braccio',coscia:'Coscia',fianchi:'Fianchi'};
+    const baseline=getMisureBaseline();
+    const latest=getMisureLatest();
+    const el=document.getElementById('misure-display');
+    if(!el) return;
+    if(!baseline&&!latest){
+      el.innerHTML='<p style="font-size:13px;color:rgba(255,255,255,.22);text-align:center;padding:14px 0">Nessuna misura ancora.<br>Aggiungile per vedere i progressi nel tempo.</p>';
+      return;
+    }
+    const src=latest||baseline;
+    el.innerHTML=Object.entries(LABELS).map(([k,label])=>{
+      const val=src[k]; if(!val) return '';
+      const b=baseline?.[k];
+      const n=latest?.[k];
+      const delta=(b&&n&&b!==n)?Math.round((n-b)*10)/10:null;
+      const dStr=delta!==null?` <span style="font-size:11px;font-weight:600;color:${delta===0?'rgba(255,255,255,.3)':delta>0?'#60a5fa':'#a3e635'}">${delta>0?'+':''}${delta}cm</span>`:'';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+        <span style="font-size:13px;color:rgba(255,255,255,.45)">${label}</span>
+        <span style="font-size:14px;font-weight:600;color:#f5f5f7;font-family:'Space Mono',monospace">${val}cm${dStr}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function analisiCompleta(){
+    const p=JSON.parse(localStorage.getItem('forma_profilo')||'null');
+    const giorni=giorniPercorso();
+    const pesoL=getPesoLatest();
+    const pesoB=getPesoBaseline();
+    const misL=getMisureLatest();
+    const misB=getMisureBaseline();
+    const LABELS={vita:'Vita',petto:'Petto',braccio:'Braccio',coscia:'Coscia',fianchi:'Fianchi'};
+    // Calorie 7gg
+    let calsArr=[];
+    for(let i=6;i>=0;i--){
+      const d=new Date(); d.setDate(d.getDate()-i);
+      const diary=JSON.parse(localStorage.getItem('forma_diario_'+d.toISOString().slice(0,10))||'null');
+      if(diary?.pasti?.length){
+        const tot=diary.pasti.reduce((a,x)=>a+(x.kcal||0),0);
+        calsArr.push(d.toLocaleDateString('it-IT',{weekday:'short'})+': '+tot+'kcal');
+      }
+    }
+    // Check-in 7gg medi
+    let checkArr=[];
+    for(let i=6;i>=0;i--){
+      const d=new Date(); d.setDate(d.getDate()-i);
+      const ck=JSON.parse(localStorage.getItem('forma_check_'+d.toISOString().slice(0,10))||'null');
+      if(ck) checkArr.push(`energia ${ck.energia} recupero ${ck.recupero} motivazione ${ck.motivazione}`);
+    }
+    let prompt=`Analisi completa percorso fitness — giorno ${giorni} dall'inizio.\n`;
+    prompt+=`Obiettivo: ${p?.obiettivo||'non specificato'}. Profilo: ${p?.nome||'utente'}, ${p?.peso||'?'}kg, attività ${p?.attivita||'?'}.\n`;
+    prompt+=`\nPESO: ${pesoB?'inizio '+pesoB+'kg → ':''} ${pesoL?'attuale '+pesoL.peso+'kg':' non tracciato'}`;
+    if(pesoB&&pesoL){
+      const d=Math.round((pesoL.peso-pesoB)*10)/10;
+      prompt+=` (${d>0?'+':''}${d}kg totali)`;
+    }
+    if(misB||misL){
+      prompt+=`\nMISURE CORPOREE (inizio → ora):`;
+      Object.entries(LABELS).forEach(([k,l])=>{
+        const b=misB?.[k],n=misL?.[k];
+        if(b||n) prompt+=` ${l}: ${b?b+'cm':'?'} → ${n?n+'cm':'?'}.`;
+      });
+    }
+    if(calsArr.length) prompt+=`\nCALORIE 7GG: ${calsArr.join(', ')}.`;
+    prompt+=`\nSONNO: ${getSonnoStr()}.`;
+    if(checkArr.length) prompt+=`\nBENESSERE: ${checkArr.join(' | ')}.`;
+    prompt+=`\n\nDammi un'analisi seria e dettagliata: cosa sta funzionando, trend reali, cosa ottimizzare questa settimana, obiettivi concreti per le prossime 2 settimane. Numeri precisi dove ci sono.`;
+    setTab('chat');
+    invia(prompt);
   }
 
   /* ── FOTO PASTO ── */
