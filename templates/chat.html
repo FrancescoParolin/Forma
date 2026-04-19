@@ -43,34 +43,36 @@
     .nav-item.active::after{width:20px}
 
     /* Cards — Apple dark */
-    .card{background:#111;border:1px solid rgba(255,255,255,.07);border-radius:20px;transition:transform .2s,border-color .2s;cursor:pointer}
-    .card:hover{border-color:rgba(163,230,53,.2);transform:translateY(-1px)}
+    .card{background:#111;border:1px solid rgba(255,255,255,.06);border-radius:22px;transition:border-color .25s}
+    .card:hover{border-color:rgba(255,255,255,.11)}
+    .card-action{cursor:pointer}
+    .card-action:hover{border-color:rgba(163,230,53,.18)}
 
     /* Input */
-    .chat-input{background:#111;border:1px solid rgba(255,255,255,.08);border-radius:18px;transition:border-color .2s,box-shadow .2s}
-    .chat-input:focus-within{border-color:rgba(163,230,53,.3);box-shadow:0 0 0 3px rgba(163,230,53,.05)}
+    .chat-input{background:#141414;border:1px solid rgba(255,255,255,.09);border-radius:20px;transition:border-color .2s,box-shadow .25s}
+    .chat-input:focus-within{border-color:rgba(163,230,53,.25);box-shadow:0 0 0 4px rgba(163,230,53,.04)}
 
     /* Bubbles */
-    .bot-bubble{background:#111;border:1px solid rgba(255,255,255,.07);border-radius:18px;border-bottom-left-radius:4px}
-    .user-bubble{background:linear-gradient(135deg,#a3e635,#65a30d);border-radius:18px;border-bottom-right-radius:4px;color:#000;font-weight:600}
+    .bot-bubble{background:#141414;border:1px solid rgba(255,255,255,.06);border-radius:18px;border-bottom-left-radius:5px}
+    .user-bubble{background:linear-gradient(135deg,#a3e635,#65a30d);border-radius:18px;border-bottom-right-radius:5px;color:#000;font-weight:600}
 
     /* Chips */
-    .chip{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.45);padding:8px 16px;border-radius:99px;font-size:12px;cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;font-weight:500}
-    .chip:hover{border-color:rgba(163,230,53,.35);color:#a3e635;background:rgba(163,230,53,.05)}
-    .chip.sel{border-color:#a3e635;color:#a3e635;background:rgba(163,230,53,.08)}
+    .chip{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.5);padding:9px 18px;border-radius:99px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:-.1px}
+    .chip:hover{border-color:rgba(163,230,53,.3);color:#a3e635;background:rgba(163,230,53,.04)}
+    .chip.sel{border-color:#a3e635;color:#a3e635;background:rgba(163,230,53,.07)}
 
     /* Progress */
-    .bar-bg{background:rgba(255,255,255,.07);border-radius:99px;height:5px;overflow:hidden}
-    .bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#a3e635,#65a30d);transition:width .6s cubic-bezier(.4,0,.2,1)}
+    .bar-bg{background:rgba(255,255,255,.06);border-radius:99px;height:4px;overflow:hidden}
+    .bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#a3e635,#65a30d);transition:width .7s cubic-bezier(.4,0,.2,1)}
 
     /* Buttons */
-    .btn-primary{background:linear-gradient(135deg,#a3e635,#65a30d);color:#000;font-weight:700;border:none;border-radius:14px;padding:14px 20px;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;letter-spacing:.2px;transition:opacity .15s,transform .15s;width:100%}
-    .btn-primary:hover{opacity:.9;transform:scale(.99)}
-    .btn-primary:active{transform:scale(.97)}
+    .btn-primary{background:linear-gradient(135deg,#a3e635,#65a30d);color:#000;font-weight:700;border:none;border-radius:16px;padding:15px 20px;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;letter-spacing:.1px;transition:opacity .15s,transform .15s;width:100%}
+    .btn-primary:hover{opacity:.88}
+    .btn-primary:active{transform:scale(.98)}
 
     /* Action buttons */
-    .act-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.4);padding:5px 12px;border-radius:8px;font-size:11px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;font-weight:500}
-    .act-btn:hover{border-color:rgba(163,230,53,.3);color:#a3e635}
+    .act-btn{background:transparent;border:none;color:rgba(255,255,255,.28);padding:4px 2px;font-size:11px;cursor:pointer;transition:color .15s;font-family:'Inter',sans-serif;font-weight:500}
+    .act-btn:hover{color:rgba(255,255,255,.6)}
 
     /* Response */
     .resp-title{font-size:16px;font-weight:700;color:#f5f5f7;letter-spacing:-.4px;margin:8px 0 5px;line-height:1.3}
@@ -131,9 +133,7 @@
     <!-- Fade top separato per garantire leggibilità riga superiore -->
     <div class="absolute top-0 left-0 right-0" style="height:80px;background:linear-gradient(to bottom,rgba(8,11,8,.7),transparent)"></div>
     <!-- Bottom fade -->
-    <div class="absolute bottom-0 left-0 right-0" style="height:100px;background:linear-gradient(to bottom,transparent,#080b08)"></div>
-    <!-- Lime accent line top -->
-    <div class="absolute top-0 left-0 right-0" style="height:2px;background:linear-gradient(90deg,transparent 0%,#a3e635 40%,transparent 100%)"></div>
+    <div class="absolute bottom-0 left-0 right-0" style="height:120px;background:linear-gradient(to bottom,transparent,#000)"></div>
 
     <!-- Contenuto hero -->
     <div class="absolute inset-0 flex flex-col justify-between px-5 pt-6 pb-7">
@@ -150,7 +150,6 @@
       <div class="flex items-end justify-between gap-4">
         <div style="flex:1;min-width:0">
           <h1 style="font-size:62px;font-weight:700;color:#fff;letter-spacing:-3px;line-height:.9">FORMA</h1>
-          <p style="color:rgba(255,255,255,.3);font-size:11px;margin-top:10px;letter-spacing:2px;text-transform:uppercase">Cucina · Macro · Fitness</p>
         </div>
         <div id="hero-streak" style="display:none;background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.3);border-radius:12px;padding:10px 14px;text-align:center;flex-shrink:0">
           <p id="streak-num" style="font-size:26px;font-weight:700;color:#a3e635;line-height:1;font-family:'Space Mono',monospace">0</p>
@@ -161,73 +160,45 @@
     </div>
   </div>
 
-  <div class="w-full flex flex-col flex-1" style="max-width:680px;padding-bottom:80px">
+  <div class="w-full flex flex-col flex-1" style="max-width:680px;padding-bottom:96px">
 
     <!-- ── TAB CHAT ── -->
     <div id="view-chat" class="flex flex-col flex-1">
       <div id="chat" class="flex-1 overflow-y-auto px-4 py-5 flex flex-col gap-4" style="max-height:calc(100vh - 460px);min-height:180px">
-        <div id="welcome" class="flex flex-col gap-4">
+        <div id="welcome" class="flex flex-col gap-6 pt-2">
 
-          <!-- Macro preview chips -->
-          <div class="card p-4 flex flex-col gap-3">
-            <p style="color:rgba(255,255,255,.38);font-size:11px;letter-spacing:1px;text-transform:uppercase">Obiettivo rapido</p>
-            <div class="flex gap-2 flex-wrap">
-              <button class="chip" onclick="invia('Ricetta alta proteina post allenamento, 40g proteine almeno, con macro')">Post-workout</button>
-              <button class="chip" onclick="invia('Colazione per chi vuole definizione muscolare, con macro complete')">Colazione fit</button>
-              <button class="chip" onclick="invia('Pranzo per massa muscolare, ricco di carboidrati e proteine, con macro')">Pranzo massa</button>
-              <button class="chip" onclick="invia('Cena leggera per definizione, poche calorie alta proteina, con macro')">Cena light</button>
-            </div>
+          <!-- Welcome message -->
+          <div style="padding:0 4px">
+            <p style="font-size:22px;font-weight:600;color:#f5f5f7;letter-spacing:-.4px;line-height:1.25">Cosa vuoi mangiare oggi?</p>
+            <p style="font-size:14px;color:rgba(255,255,255,.32);margin-top:6px;line-height:1.5">Dimmi un obiettivo, un ingrediente, o chiedi una ricetta.</p>
           </div>
 
-          <!-- Photo cards -->
-          <div class="grid grid-cols-2 gap-3">
-            <div class="relative rounded-2xl overflow-hidden cursor-pointer" style="height:110px;background-image:url('https://images.unsplash.com/photo-1547496502-affa22d38842?w=400&q=70');background-size:cover;background-position:center" onclick="openModal('Brunch Fit',['Con uova e avocado','Alta proteina','Vegetariano','Veloce — meno di 15 min'])">
-              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(8,11,8,.9),transparent)"></div>
-              <div class="absolute bottom-0 left-0 p-3">
-                <p class="font-bold text-sm" style="color:#a3e635">Brunch Fit</p>
-                <p style="color:rgba(255,255,255,.38);font-size:11px">alto in proteine</p>
-              </div>
-            </div>
-            <div class="relative rounded-2xl overflow-hidden cursor-pointer" style="height:110px;background-image:url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&q=70');background-size:cover;background-position:center" onclick="openModal('Meal Prep',['Per la settimana — massa','Per la settimana — definizione','Solo 3 giorni','Con pollo e riso'])">
-              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(8,11,8,.9),transparent)"></div>
-              <div class="absolute bottom-0 left-0 p-3">
-                <p class="font-bold text-sm" style="color:#a3e635">Meal Prep</p>
-                <p style="color:rgba(255,255,255,.38);font-size:11px">5 giorni pronti</p>
-              </div>
-            </div>
-            <div class="relative rounded-2xl overflow-hidden cursor-pointer" style="height:110px;background-image:url('https://images.unsplash.com/photo-1505576399279-565b52d4ac71?w=400&q=70');background-size:cover;background-position:center" onclick="openModal('Pre-Workout',['1 ora prima — classico','30 minuti prima — leggero','Mattina presto','Pomeriggio'])">
-              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(8,11,8,.9),transparent)"></div>
-              <div class="absolute bottom-0 left-0 p-3">
-                <p class="font-bold text-sm" style="color:#a3e635">Pre-Workout</p>
-                <p style="color:rgba(255,255,255,.38);font-size:11px">energia esplosiva</p>
-              </div>
-            </div>
-            <div class="relative rounded-2xl overflow-hidden cursor-pointer" style="height:110px;background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&q=70');background-size:cover;background-position:center" onclick="openModal('Plant Protein',['Pranzo veloce','Cena abbondante','Post allenamento','Colazione proteica'])">
-              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(8,11,8,.9),transparent)"></div>
-              <div class="absolute bottom-0 left-0 p-3">
-                <p class="font-bold text-sm" style="color:#a3e635">Plant Protein</p>
-                <p style="color:rgba(255,255,255,.38);font-size:11px">vegetariano fit</p>
-              </div>
-            </div>
+          <!-- Quick chips -->
+          <div class="flex gap-2 flex-wrap" style="padding:0 4px">
+            <button class="chip" onclick="invia('Ricetta alta proteina post allenamento, 40g proteine almeno, con macro')">Post-workout</button>
+            <button class="chip" onclick="invia('Colazione per chi vuole definizione muscolare, con macro complete')">Colazione fit</button>
+            <button class="chip" onclick="invia('Pranzo per massa muscolare, ricco di carboidrati e proteine, con macro')">Pranzo massa</button>
+            <button class="chip" onclick="invia('Cena leggera per definizione, poche calorie alta proteina, con macro')">Cena light</button>
+            <button class="chip" onclick="invia('Meal prep domenicale per 5 giorni, obiettivo massa, con macro totali')">Meal prep</button>
           </div>
+
         </div>
       </div>
 
       <!-- Input -->
-      <div class="px-4 pb-5 pt-2">
-        <div class="chat-input flex gap-3 px-4 py-3">
-          <textarea id="input" rows="1" placeholder="Chiedi una ricetta, calcola i tuoi macro, meal prep..."
-            class="flex-1 outline-none resize-none font-sans text-sm leading-relaxed"
-            style="background:transparent;color:#f5f5f7;max-height:120px"
+      <div class="px-4 pb-6 pt-3">
+        <div class="chat-input flex gap-3 px-5 py-4">
+          <textarea id="input" rows="1" placeholder="Chiedi una ricetta, un consiglio, i tuoi macro..."
+            class="flex-1 outline-none resize-none font-sans leading-relaxed"
+            style="background:transparent;color:#f5f5f7;max-height:120px;font-size:15px"
             onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();inviaForm()}"
             oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
-          <button id="send" onclick="inviaForm()" style="background:linear-gradient(135deg,#a3e635,#65a30d);width:36px;height:36px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:flex-end;box-shadow:0 4px 12px rgba(163,230,53,.3)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#080b08" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          <button id="send" onclick="inviaForm()" style="background:linear-gradient(135deg,#a3e635,#65a30d);width:38px;height:38px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:flex-end;transition:opacity .15s">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
           </button>
         </div>
-        <div class="flex justify-between mt-2 px-1">
-          <span style="font-size:11px;color:rgba(255,255,255,.2)">↵ Invia · Shift+↵ nuova riga</span>
-          <button onclick="resetChat()" style="font-size:11px;color:rgba(255,255,255,.2);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif" class="hover:text-lime-400 transition-colors">↺ Reset</button>
+        <div class="flex justify-end mt-2 px-1">
+          <button onclick="resetChat()" style="font-size:11px;color:rgba(255,255,255,.18);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:color .15s" onmouseover="this.style.color='rgba(255,255,255,.4)'" onmouseout="this.style.color='rgba(255,255,255,.18)'">Reset conversazione</button>
         </div>
       </div>
     </div>
@@ -236,8 +207,8 @@
     <div id="view-macro" class="hidden px-4 py-5 flex flex-col gap-4">
       <div class="card p-5 flex flex-col gap-4">
         <div>
-          <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">CALCOLA IL TUO TDEE</p>
-          <p style="color:rgba(255,255,255,.38);font-size:13px;margin-top:4px">Inserisci i tuoi dati per ottenere fabbisogno calorico e macro personalizzati</p>
+          <p style="font-size:20px;font-weight:600;color:#f5f5f7;letter-spacing:-.3px">Calcola i tuoi macro</p>
+          <p style="color:rgba(255,255,255,.35);font-size:14px;margin-top:5px;line-height:1.4">Fabbisogno calorico personalizzato in base al tuo profilo.</p>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
@@ -286,7 +257,7 @@
 
       <!-- Risultati -->
       <div id="macro-result" class="hidden card p-5 flex flex-col gap-4">
-        <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">I TUOI MACRO</p>
+        <p style="font-size:17px;font-weight:600;color:#f5f5f7;letter-spacing:-.3px">I tuoi macro</p>
         <div class="grid grid-cols-2 gap-3">
           <div class="p-3 rounded-xl text-center" style="background:#000;border:1px solid rgba(255,255,255,.08)">
             <p id="r-kcal" style="font-size:24px;font-weight:700;color:#a3e635;font-family:'Space Mono',monospace">—</p>
@@ -313,8 +284,8 @@
     <div id="view-frigo" class="hidden px-4 py-5 flex flex-col gap-4">
       <div class="card p-5 flex flex-col gap-4">
         <div>
-          <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">SCANNER FRIGO</p>
-          <p style="color:rgba(255,255,255,.38);font-size:13px;margin-top:4px">Elenca ingredienti → ricevo ricette ottimizzate con macro.</p>
+          <p style="font-size:20px;font-weight:600;color:#f5f5f7;letter-spacing:-.3px">Cosa hai in frigo?</p>
+          <p style="color:rgba(255,255,255,.35);font-size:14px;margin-top:5px;line-height:1.4">Elenca gli ingredienti, ti dico cosa cucinare.</p>
         </div>
         <textarea id="frigo-input" rows="3" placeholder="es: petto di pollo, riso, zucchine, uova, ricotta..."
           class="w-full px-3 py-3 rounded-xl text-sm outline-none resize-none"
@@ -342,7 +313,7 @@
     <!-- ── TAB GYM ── -->
     <div id="view-gym" class="hidden px-4 py-5 flex flex-col gap-4">
       <div class="card p-4">
-        <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:12px">— PASTI STRATEGICI —</p>
+        <p style="font-size:20px;font-weight:600;color:#f5f5f7;letter-spacing:-.3px;margin-bottom:16px">Pasti strategici</p>
         <div class="flex flex-col gap-3">
           <button class="card p-4 text-left" onclick="setTab('chat');invia('Dammi 3 opzioni di pasto pre-allenamento per la mattina, ottimizzati per performance. Con macro.')">
             <div class="flex items-center gap-3">
@@ -383,8 +354,8 @@
       <div class="card p-4 flex flex-col gap-3">
         <div class="flex items-center justify-between">
           <div>
-            <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">— DIARIO DI OGGI —</p>
-            <p id="oggi-data" style="color:rgba(255,255,255,.38);font-size:12px;margin-top:3px"></p>
+            <p style="font-size:20px;font-weight:600;color:#f5f5f7;letter-spacing:-.3px">Oggi</p>
+            <p id="oggi-data" style="color:rgba(255,255,255,.32);font-size:13px;margin-top:3px"></p>
           </div>
           <button onclick="resetDiario()" style="font-size:10px;color:rgba(255,255,255,.2);background:none;border:none;cursor:pointer;font-family:'Space Mono',monospace" onmouseover="this.style.color='#6a8a6a'" onmouseout="this.style.color='#2d3d2d'">RESET</button>
         </div>
@@ -439,7 +410,7 @@
     <!-- ── TAB PROFILO ── -->
     <div id="view-profilo" class="hidden px-4 py-5 flex flex-col gap-4">
       <div class="card p-5 flex flex-col gap-4">
-        <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">— IL TUO PROFILO —</p>
+        <p style="font-size:20px;font-weight:600;color:#f5f5f7;letter-spacing:-.3px">Profilo</p>
         <div class="grid grid-cols-2 gap-3">
           <div class="col-span-2"><label style="font-size:10px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">NOME</label><input id="prof-nome" placeholder="Il tuo nome" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 12px;border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;margin-top:4px"></div>
           <div><label style="font-size:10px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">PESO (kg)</label><input id="prof-peso" type="number" placeholder="75" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 12px;border-radius:10px;font-size:14px;font-family:'Space Mono',monospace;outline:none;width:100%;margin-top:4px"></div>
@@ -473,7 +444,7 @@
       </div>
       <!-- Macro calcolati dal profilo -->
       <div id="prof-macro-box" class="hidden card p-4 flex flex-col gap-3">
-        <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">TARGET GIORNALIERI</p>
+        <p style="font-size:15px;font-weight:600;color:#f5f5f7;letter-spacing:-.2px">Target giornaliero</p>
         <div class="grid grid-cols-4 gap-2 text-center">
           <div class="p-3 rounded-xl" style="background:#000;border:1px solid rgba(255,255,255,.08)"><p id="prof-r-kcal" style="font-size:18px;font-weight:700;color:#a3e635;font-family:'Space Mono',monospace">—</p><p style="font-size:9px;color:rgba(255,255,255,.38)">kcal</p></div>
           <div class="p-3 rounded-xl" style="background:#000;border:1px solid rgba(255,255,255,.08)"><p id="prof-r-prot" style="font-size:18px;font-weight:700;color:#60a5fa;font-family:'Space Mono',monospace">—</p><p style="font-size:9px;color:rgba(255,255,255,.38)">prot</p></div>
@@ -490,8 +461,8 @@
       <div class="card p-4 flex flex-col gap-3">
         <div class="flex items-center justify-between">
           <div>
-            <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace">— PIANO SETTIMANALE —</p>
-            <p style="color:rgba(255,255,255,.38);font-size:12px;margin-top:3px">Organizza i pasti di tutta la settimana</p>
+            <p style="font-size:20px;font-weight:600;color:#f5f5f7;letter-spacing:-.3px">Piano settimanale</p>
+            <p style="color:rgba(255,255,255,.32);font-size:13px;margin-top:3px">Organizza i pasti della settimana</p>
           </div>
           <button onclick="generaPiano()" style="background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.25);color:#a3e635;padding:8px 14px;border-radius:10px;font-size:11px;font-family:'Space Mono',monospace;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all .15s" onmouseover="this.style.background='rgba(163,230,53,.2)'" onmouseout="this.style.background='rgba(163,230,53,.1)'">AI GENERA</button>
         </div>
@@ -519,8 +490,8 @@
     <!-- ── TAB SALVATE ── -->
     <div id="view-salvate" class="hidden px-4 py-5">
       <div class="card p-5">
-        <p style="color:#a3e635;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:4px">RICETTE SALVATE</p>
-        <p style="color:rgba(255,255,255,.38);font-size:12px;margin-bottom:16px">Premi "salva" su una risposta per archiviarla.</p>
+        <p style="font-size:20px;font-weight:600;color:#f5f5f7;letter-spacing:-.3px;margin-bottom:6px">Salvate</p>
+        <p style="color:rgba(255,255,255,.32);font-size:14px;margin-bottom:20px">Premi Salva su una risposta per archiviarla.</p>
         <div id="salvate-list" class="flex flex-col gap-3"></div>
         <div id="salvate-empty" class="text-center py-8" style="color:rgba(255,255,255,.2);font-size:13px">Nessuna ricetta salvata.</div>
       </div>
