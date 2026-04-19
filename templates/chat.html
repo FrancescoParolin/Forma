@@ -116,6 +116,7 @@
     .heart-pop{animation:heartPop .3s cubic-bezier(.34,1.56,.64,1)}
 
     @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
     /* Onboarding */
     #onboard-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:70;backdrop-filter:blur(12px)}
@@ -382,7 +383,14 @@
 
       <!-- Aggiungi pasto -->
       <div class="card p-4 flex flex-col gap-3">
-        <p style="font-size:11px;color:rgba(255,255,255,.38);letter-spacing:1px;text-transform:uppercase;font-family:'Space Mono',monospace">Aggiungi pasto</p>
+        <div class="flex items-center justify-between">
+          <p style="font-size:17px;font-weight:600;color:#f5f5f7;letter-spacing:-.2px">Aggiungi pasto</p>
+          <button onclick="apriFoto()" style="display:flex;align-items:center;gap:6px;background:rgba(163,230,53,.08);border:1px solid rgba(163,230,53,.2);color:#a3e635;padding:7px 14px;border-radius:99px;font-size:12px;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;transition:all .15s" onmouseover="this.style.background='rgba(163,230,53,.14)'" onmouseout="this.style.background='rgba(163,230,53,.08)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            Foto
+          </button>
+        </div>
+        <input type="file" id="foto-input" accept="image/*" capture="environment" style="display:none" onchange="handleFotoFile(this)">
         <input id="d-nome" placeholder="Nome pasto (es. Pasta al pollo)" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:10px 12px;border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;width:100%">
         <div class="grid grid-cols-4 gap-2">
           <div><label style="font-size:9px;color:rgba(255,255,255,.38);font-family:'Space Mono',monospace">KCAL</label><input id="d-kcal" type="number" placeholder="520" style="background:#000;border:1px solid rgba(255,255,255,.08);color:#a3e635;padding:8px;border-radius:8px;font-size:13px;font-family:'Space Mono',monospace;outline:none;width:100%;text-align:center"></div>
@@ -592,6 +600,55 @@
     </div>
     <textarea id="newpost-txt" rows="3" placeholder="Racconta il tuo momento..." style="background:#000;border:1px solid rgba(255,255,255,.08);color:#f5f5f7;padding:14px;border-radius:14px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;resize:none;margin-bottom:14px;line-height:1.5"></textarea>
     <button class="btn-primary" onclick="pubblicaPost()">PUBBLICA</button>
+  </div>
+
+  <!-- FOTO MODAL -->
+  <div id="foto-overlay" onclick="closeFotoModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;backdrop-filter:blur(8px)"></div>
+  <div id="foto-modal" style="display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:680px;background:#111;border-top:1px solid rgba(255,255,255,.08);border-radius:28px 28px 0 0;padding:28px 20px 44px;z-index:51">
+    <div style="width:36px;height:3px;background:rgba(255,255,255,.12);border-radius:99px;margin:0 auto 24px"></div>
+
+    <!-- Preview -->
+    <div id="foto-preview-wrap" style="display:none;margin-bottom:20px">
+      <img id="foto-preview" style="width:100%;max-height:220px;object-fit:cover;border-radius:16px;display:block">
+    </div>
+
+    <!-- Loading -->
+    <div id="foto-loading" style="display:none;text-align:center;padding:32px 0">
+      <div style="width:40px;height:40px;border:2px solid rgba(163,230,53,.15);border-top-color:#a3e635;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px"></div>
+      <p style="font-size:14px;color:rgba(255,255,255,.4)">Analisi in corso...</p>
+    </div>
+
+    <!-- Risultato -->
+    <div id="foto-result" style="display:none">
+      <p id="foto-nome" style="font-size:20px;font-weight:700;color:#f5f5f7;letter-spacing:-.4px;margin-bottom:4px"></p>
+      <p id="foto-note" style="font-size:13px;color:rgba(255,255,255,.35);margin-bottom:20px;line-height:1.4"></p>
+      <div class="grid grid-cols-4 gap-3 mb-5">
+        <div style="background:#000;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:14px 8px;text-align:center">
+          <p id="foto-kcal" style="font-size:22px;font-weight:700;color:#a3e635;letter-spacing:-1px">—</p>
+          <p style="font-size:10px;color:rgba(255,255,255,.3);margin-top:3px">kcal</p>
+        </div>
+        <div style="background:#000;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:14px 8px;text-align:center">
+          <p id="foto-prot" style="font-size:22px;font-weight:700;color:#60a5fa;letter-spacing:-1px">—</p>
+          <p style="font-size:10px;color:rgba(255,255,255,.3);margin-top:3px">prot g</p>
+        </div>
+        <div style="background:#000;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:14px 8px;text-align:center">
+          <p id="foto-carb" style="font-size:22px;font-weight:700;color:#f59e0b;letter-spacing:-1px">—</p>
+          <p style="font-size:10px;color:rgba(255,255,255,.3);margin-top:3px">carb g</p>
+        </div>
+        <div style="background:#000;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:14px 8px;text-align:center">
+          <p id="foto-grassi" style="font-size:22px;font-weight:700;color:#f87171;letter-spacing:-1px">—</p>
+          <p style="font-size:10px;color:rgba(255,255,255,.3);margin-top:3px">grassi g</p>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="aggiungiDaFoto()">Aggiungi al diario</button>
+      <button onclick="closeFotoModal()" style="display:block;width:100%;margin-top:10px;background:none;border:none;color:rgba(255,255,255,.25);font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;padding:8px">Annulla</button>
+    </div>
+
+    <!-- Errore -->
+    <div id="foto-errore" style="display:none;text-align:center;padding:20px 0">
+      <p style="font-size:15px;color:rgba(255,255,255,.5);margin-bottom:16px">Non riesco ad analizzare l'immagine.</p>
+      <button onclick="apriFoto()" class="btn-primary">Riprova</button>
+    </div>
   </div>
 
   <!-- TIMER BAR -->
@@ -1614,6 +1671,89 @@
     localStorage.setItem('forma_social', JSON.stringify(socialPosts));
     closeNewPost();
     renderFeed();
+  }
+
+  /* ── FOTO PASTO ── */
+  let fotoRisultato = null;
+
+  function apriFoto() {
+    const input = document.getElementById('foto-input');
+    input.value = '';
+    input.click();
+  }
+
+  function handleFotoFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const dataUrl = e.target.result;
+      const base64 = dataUrl.split(',')[1];
+      const tipo = file.type || 'image/jpeg';
+      mostraFotoModal(dataUrl, base64, tipo);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function mostraFotoModal(dataUrl, base64, tipo) {
+    // Reset stato
+    document.getElementById('foto-loading').style.display = 'none';
+    document.getElementById('foto-result').style.display = 'none';
+    document.getElementById('foto-errore').style.display = 'none';
+    // Mostra preview
+    document.getElementById('foto-preview').src = dataUrl;
+    document.getElementById('foto-preview-wrap').style.display = 'block';
+    // Apri modal
+    document.getElementById('foto-overlay').style.display = 'block';
+    document.getElementById('foto-modal').style.display = 'block';
+    // Avvia analisi
+    document.getElementById('foto-loading').style.display = 'block';
+    analizzaFoto(base64, tipo);
+  }
+
+  async function analizzaFoto(base64, tipo) {
+    try {
+      const r = await fetch('/foto', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({immagine: base64, tipo})
+      });
+      const data = await r.json();
+      document.getElementById('foto-loading').style.display = 'none';
+      if (data.ok && data.risultato) {
+        const res = data.risultato;
+        fotoRisultato = res;
+        document.getElementById('foto-nome').textContent = res.nome || 'Pasto';
+        document.getElementById('foto-note').textContent = res.note || '';
+        document.getElementById('foto-kcal').textContent = res.kcal || '—';
+        document.getElementById('foto-prot').textContent = res.prot || '—';
+        document.getElementById('foto-carb').textContent = res.carb || '—';
+        document.getElementById('foto-grassi').textContent = res.grassi || '—';
+        document.getElementById('foto-result').style.display = 'block';
+      } else {
+        document.getElementById('foto-errore').style.display = 'block';
+      }
+    } catch(e) {
+      document.getElementById('foto-loading').style.display = 'none';
+      document.getElementById('foto-errore').style.display = 'block';
+    }
+  }
+
+  function aggiungiDaFoto() {
+    if (!fotoRisultato) return;
+    document.getElementById('d-nome').value = fotoRisultato.nome || '';
+    document.getElementById('d-kcal').value = fotoRisultato.kcal || '';
+    document.getElementById('d-prot').value = fotoRisultato.prot || '';
+    document.getElementById('d-carb').value = fotoRisultato.carb || '';
+    document.getElementById('d-grassi').value = fotoRisultato.grassi || '';
+    closeFotoModal();
+    aggiungiPasto();
+  }
+
+  function closeFotoModal() {
+    document.getElementById('foto-overlay').style.display = 'none';
+    document.getElementById('foto-modal').style.display = 'none';
+    fotoRisultato = null;
   }
 
   /* ── INIT ── */

@@ -67,6 +67,42 @@ def chat():
     return Response(stream_with_context(genera()), mimetype="text/event-stream",
                     headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
+@app.route("/foto", methods=["POST"])
+def analizza_foto():
+    data = request.json
+    img_b64 = data.get("immagine", "")
+    media_type = data.get("tipo", "image/jpeg")
+    if not img_b64:
+        return jsonify({"ok": False, "errore": "nessuna immagine"}), 400
+    try:
+        risposta = claude.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=400,
+            messages=[{
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image",
+                        "source": {"type": "base64", "media_type": media_type, "data": img_b64}
+                    },
+                    {
+                        "type": "text",
+                        "text": 'Sei un nutrizionista preciso. Analizza il pasto in questa foto e stima i macro per la porzione visibile. Rispondi SOLO con JSON valido, zero testo extra: {"nome":"nome del piatto","kcal":0,"prot":0,"carb":0,"grassi":0,"note":"breve nota sulla stima (es. porzione media, difficile stimare la salsa)"}'
+                    }
+                ]
+            }]
+        )
+        testo = risposta.content[0].text.strip()
+        # Estrai JSON anche se Claude aggiunge testo attorno
+        import re, json
+        match = re.search(r'\{.*\}', testo, re.DOTALL)
+        if match:
+            risultato = json.loads(match.group())
+            return jsonify({"ok": True, "risultato": risultato})
+        return jsonify({"ok": False, "errore": "risposta non parsabile", "raw": testo})
+    except Exception as e:
+        return jsonify({"ok": False, "errore": str(e)}), 500
+
 @app.route("/reset", methods=["POST"])
 def reset():
     global conversazione
