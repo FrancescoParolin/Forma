@@ -174,8 +174,13 @@
 
     <!-- ── TAB CHAT ── -->
     <div id="view-chat" class="flex flex-col flex-1">
-      <div id="chat" class="flex-1 overflow-y-auto px-4 py-5 flex flex-col gap-4" style="max-height:calc(100vh - 460px);min-height:180px">
-        <div id="welcome" class="flex flex-col gap-6 pt-2">
+      <!-- Chat messages — empty until first send -->
+      <div id="chat" class="flex-1 overflow-y-auto px-4 py-5 flex flex-col gap-4" style="display:none;min-height:0">
+      </div>
+
+      <!-- Welcome screen — shown until first message -->
+      <div id="welcome" class="flex-1 overflow-y-auto px-4 py-5 flex flex-col gap-6">
+        <div class="flex flex-col gap-6 pt-2">
 
           <!-- Welcome message -->
           <div style="padding:0 4px">
@@ -263,8 +268,8 @@
             <button class="chip" onclick="invia('Meal prep domenicale 5 giorni obiettivo massa, con macro totali')">Meal prep</button>
           </div>
 
-        </div>
-      </div>
+        </div><!-- end inner flex col -->
+      </div><!-- end #welcome -->
 
       <!-- Input -->
       <div class="px-4 pb-6 pt-3">
@@ -1250,7 +1255,13 @@
 
   /* CHAT */
   function addMsg(text, type) {
-    if(!hasMsg) { document.getElementById('welcome')?.remove(); hasMsg = true; }
+    if(!hasMsg) {
+      document.getElementById('welcome').style.display = 'none';
+      const c = document.getElementById('chat');
+      c.style.display = '';
+      c.classList.add('flex');
+      hasMsg = true;
+    }
     const chat = document.getElementById('chat');
     const div = document.createElement('div');
     div.className = 'fade-up flex gap-3 ' + (type==='user'?'flex-row-reverse':'');
@@ -1366,7 +1377,13 @@
   }
 
   function addStreamBubble() {
-    if(!hasMsg) { document.getElementById('welcome')?.remove(); hasMsg = true; }
+    if(!hasMsg) {
+      document.getElementById('welcome').style.display = 'none';
+      const c = document.getElementById('chat');
+      c.style.display = '';
+      c.classList.add('flex');
+      hasMsg = true;
+    }
     const chat = document.getElementById('chat');
     const div = document.createElement('div');
     div.className = 'fade-up flex gap-3';
