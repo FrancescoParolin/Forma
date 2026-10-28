@@ -38,10 +38,32 @@ risoluzione che "ASAPROJECT" e "0123456789" siano scritti giusti.
 - L'effetto 3D lucido e l'alone sfumato sono sfumature fotografiche: la tecnica
   (DTG, DTF o serigrafia a retino) va decisa con lo stampatore.
 
+## Prove di sovrapposizione (`sovrapposizione/`)
+
+Le due scritte incrociate invece che una sotto l'altra, sulla foto originale
+della felpa. I numeri restano sopra il rosa, bianchi e senza bordo.
+
+| File                              | Trattamento                                                    |
+|-----------------------------------|----------------------------------------------------------------|
+| `retro_B_numeri_al_centro.jpg`    | numeri al centro di ASAPROJECT                                 |
+| `retro_D_numeri_in_alto.jpg`      | rosa più in basso, i numeri tagliano la parte alta delle lettere |
+| `retro_G_numeri_sulle_gocce.jpg`  | rosa più in alto, i numeri passano sulle gocce                 |
+| `retro_I_intreccio.jpg`           | tre aste rosa ripassano sopra i numeri                         |
+| `fronte_sovrapposto.jpg`          | logo piccolo sul petto, i numeri passano sulle gocce           |
+
+Senza bordo, l'intreccio (I) fa sembrare le cifre interrotte: è la prova più debole.
+
 ## Rigenerare i mockup
 
 ```
 python3 composite.py grafica.png retro.jpg fronte.jpg cartella_output/
 ```
 
-Le coordinate in `composite.py` sono calibrate sulle foto originali 1066×1600 della felpa.
+Per le sovrapposizioni:
+
+```
+python3 overlap.py grafica.png retro.jpg cartella_output/
+python3 overlap_front.py grafica.png fronte.jpg output.jpg 120 -12 0   # larghezza, spostamento verticale, bordo
+```
+
+Le coordinate negli script sono calibrate sulle foto originali 1066×1600 della felpa.
