@@ -12,6 +12,15 @@ def pink_layer(width):
     a = art.resize((width, h), Image.LANCZOS).filter(ImageFilter.SMOOTH)
     # Opaque inside the letters, translucent only on the fuzzy dark fringe
     alpha = a.split()[0].point(lambda v: max(0, min(255, (v - 12) * 255 // 90)))
+    # Fade dull grey fringe pixels (not the white highlights) so they don't print as haze
+    hi = ImageChops.lighter(ImageChops.lighter(*a.split()[:2]), a.split()[2])
+    lo = ImageChops.darker(ImageChops.darker(*a.split()[:2]), a.split()[2])
+    hp, sp = hi.load(), ImageChops.subtract(hi, lo).load()
+    ap = alpha.load()
+    for y in range(a.height):
+        for x in range(a.width):
+            if sp[x, y] < 35 and 40 < hp[x, y] < 170:
+                ap[x, y] = ap[x, y] * 35 // 100
     rgba = a.convert("RGBA")
     rgba.putalpha(alpha)
     return rgba
@@ -80,6 +89,8 @@ variants = [
     ("D_numeri_sopra_sfalsata", 560, 55, True, 0, 0),
     ("G_numeri_sopra_gocce", 560, -40, True, 0, 0),
     ("I_intreccio_senza_bordo", 560, 20, True, 0, 0, 3),
+    # G scaled to 87% around the letter baselines so the A and T stay inside the shoulders
+    ("G_finale", 487, -38, True, 0, 0),
 ]
 crops = []
 for v in variants:

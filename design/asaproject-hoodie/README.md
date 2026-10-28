@@ -49,9 +49,16 @@ della felpa. I numeri restano sopra il rosa, bianchi e senza bordo.
 | `retro_D_numeri_in_alto.jpg`      | rosa più in basso, i numeri tagliano la parte alta delle lettere |
 | `retro_G_numeri_sulle_gocce.jpg`  | rosa più in alto, i numeri passano sulle gocce                 |
 | `retro_I_intreccio.jpg`           | tre aste rosa ripassano sopra i numeri                         |
+| `retro_G_finale.jpg`              | **scelta**: G con il rosa all'87%, tutto dentro le spalle      |
 | `fronte_sovrapposto.jpg`          | logo piccolo sul petto, i numeri passano sulle gocce           |
 
-Senza bordo, l'intreccio (I) fa sembrare le cifre interrotte: è la prova più debole.
+G è stata confermata da tre valutazioni indipendenti (impatto streetwear,
+leggibilità dei due brand, stampa) e da una verifica critica: è l'unica in
+cui si leggono per intero sia tutte le cifre sia tutte le lettere. Nella G
+originale la A e la T uscivano dalle spalle; in `retro_G_finale.jpg` il rosa
+è ridotto all'87% attorno alla base delle lettere e sta tutto dentro la
+sagoma (verificato sui pixel, con 7 px di margine). Senza bordo, l'intreccio
+(I) fa sembrare le cifre interrotte: è la prova più debole.
 
 ## Rigenerare i mockup
 
