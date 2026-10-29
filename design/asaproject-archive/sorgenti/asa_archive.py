@@ -244,26 +244,67 @@ def back_emblem(diameter_mm=235):
     s0 &= ~(cross1 & grow(s1, 1.2 * MM))
     wire = s0 | s1
 
-    # 16 four-point barbs spread over the arc outside the break, clear of the crosshair axes
-    gap_ang = mm(10) / R
+    # 16 barbs, each sitting on a strand crossing: two snipped wires crossing at 60 deg
+    # (4 points, tips ~9 mm from the axis) held by a 2-turn coil wrap
+    axes = (0, math.pi / 2, math.pi, -math.pi / 2)
+    crossings = [k * math.pi / n for k in range(2 * n)]
+    usable = [t for t in crossings
+              if _angdist(t, brk) > mm(14) / R and min(_angdist(t, ax) for ax in axes) > math.radians(8)]
+    gap_ang = mm(14) / R
     span = 2 * math.pi - 2 * gap_ang
     best = None
     for off in np.linspace(0, 1, 41):
-        ts = [brk + gap_ang + (j + off) * span / 16 for j in range(16)]
-        clear = min(_angdist(t, ax) for t in ts for ax in (0, math.pi / 2, math.pi, -math.pi / 2))
-        if best is None or clear > best[0]:
-            best = (clear, ts)
+        ideal = [brk + gap_ang + (j + off) * span / 16 for j in range(16)]
+        picked, taken = [], set()
+        for t in ideal:
+            cand = sorted((t2 for t2 in usable if t2 not in taken), key=lambda t2: _angdist(t2, t))
+            if cand:
+                picked.append(cand[0])
+                taken.add(cand[0])
+        err = sum(_angdist(a, b) for a, b in zip(picked, ideal))
+        if len(picked) == 16 and (best is None or err < best[0]):
+            best = (err, picked)
     barbs = Image.new("L", (S, S), 0)
     db2 = ImageDraw.Draw(barbs)
+    hw = mm(2.5) / 2
+    L = (mm(barb_reach) - hw * math.sin(math.radians(30))) / math.cos(math.radians(30))
+    cut = mm(3.0)
+    wraps = []
     for t in best[1]:
         bx, by = c + R * math.cos(t), c + R * math.sin(t)
+        for a in (t + math.radians(30), t - math.radians(30)):
+            ux, uy = math.cos(a), math.sin(a)
+            nx, ny = -uy, ux
+            loc = lambda s, q: (bx + s * ux + q * nx, by + s * uy + q * ny)
+            # both ends snipped on parallel diagonals -> sharp points, like cut wire
+            db2.polygon([loc(-L + cut, hw), loc(L, hw), loc(L - cut, -hw), loc(-L, -hw)], fill=255)
+        wraps.append(t)
+    # coil wrap over the centre of each barb, with two 0.6 mm gaps between the turns
+    for t in wraps:
+        bx, by = c + R * math.cos(t), c + R * math.sin(t)
         tang = t + math.pi / 2
-        for sgn in (1, -1):
-            for flip in (0, math.pi):
-                _spike(db2, bx, by, tang + sgn * barb_ang + flip, mm(barb_len), mm(2.5))
-        r0 = mm(2.6)
-        db2.ellipse((bx - r0, by - r0, bx + r0, by + r0), fill=255)
-    wire |= hard(barbs.resize((D, D), Image.LANCZOS))
+        ux, uy = math.cos(tang), math.sin(tang)
+        nx, ny = math.cos(t), math.sin(t)
+        loc = lambda s, q: (bx + s * ux + q * nx, by + s * uy + q * ny)
+        lw, th = mm(3.0), mm(2.3)
+        db2.polygon([loc(-lw, -th), loc(lw, -th), loc(lw, th), loc(-lw, th)], fill=255)
+        for s0 in (-mm(1.0), mm(1.0)):
+            sk = math.tan(math.radians(20)) * th          # coil turns lean ~20 deg
+            g = mm(0.3)
+            db2.polygon([loc(s0 - g - sk, -th - 2), loc(s0 + g - sk, -th - 2),
+                         loc(s0 + g + sk, th + 2), loc(s0 - g + sk, th + 2)], fill=0)
+    barb_mask = hard(barbs.resize((D, D), Image.LANCZOS))
+    # the wrap's gaps cut through everything under it, strands included
+    under_wrap = np.zeros((D, D), bool)
+    wr = Image.new("L", (D, D), 0)
+    dwr = ImageDraw.Draw(wr)
+    for t in wraps:
+        x, y = D / 2 + cR * math.cos(t), D / 2 + cR * math.sin(t)
+        r = 3.6 * MM
+        dwr.ellipse((x - r, y - r, x + r, y + r), fill=255)
+    under_wrap = np.asarray(wr) > 0
+    wire = (wire & ~under_wrap) | barb_mask
+    nocrack = grow(barb_mask | under_wrap, 0.5 * MM)
 
     # the break: a short angled snip through both strands
     snip = Image.new("L", (D, D), 0)
@@ -318,7 +359,7 @@ def back_emblem(diameter_mm=235):
     neon[oy:oy + ah, ox:ox + aw] = asa
     bone &= ndimage.distance_transform_edt(~neon) > px(4)   # clear fabric around the pink
     rects = [(x0 + ox, y0 + oy, x1 + ox, y1 + oy) for x0, y0, x1, y1 in asa_rects]
-    return bone, neon, rects
+    return bone, neon, rects, nocrack
 
 
 def chest_emblem(width_mm=89):
@@ -422,6 +463,9 @@ def crack(ink, keep_out, seed=11):
         thick &= ~tiny[lbl]
     allowed = thick & ~keep_out
     out = ink & ~(cracks & allowed)
+    # a crack has to run to an edge or into the network: fill floating dashes and pinholes
+    counters = ndimage.binary_fill_holes(ink) & ~ink
+    out |= ndimage.binary_fill_holes(out) & ~out & ~counters
 
     # chips: irregular 3-6 sided bites, 0.8-2 mm, along the edges of thick strokes
     border = allowed & (inside <= 1.5)
@@ -455,15 +499,17 @@ def keep_out_mask(shape, rects, margin_mm=3.0):
 # ---------------------------------------------------------------- layouts
 
 def back_art(width_in=14.0):
-    """Back statement: wordmark 14 in, emblem 9.25 in, slogan 8 in. Returns plates dict."""
+    """Back statement: wordmark 14 in, emblem 9.25 in, slogan as wide as the emblem."""
     W = round(width_in * INCH)
-    wm, wm_rects, letters = stencil_word("ASAPROJECT", 600)
+    # letter gaps ~2x the bridges so P, R, O, E never fall apart at a distance
+    wm, wm_rects, letters = stencil_word("ASAPROJECT", 600, tracking=0.17, bridge=0.08)
     k = W / wm.shape[1]
     wm, wm_rects = fit_width(wm, W), scale_rects(wm_rects, k)
     letters = [(round(a * k), round(b * k)) for a, b in letters]
-    eb, en, e_rects = back_emblem(235)
+    eb, en, e_rects, e_nocrack = back_emblem(235)
+    ecols = np.where(eb.any(axis=0))[0]
     sl = text_line("NOBODY GAVE US PERMISSION", 400, BARLOW_XBOLD, tracking=0.04)
-    sl = fit_width(sl, round(8.0 * INCH))
+    sl = fit_width(sl, int(ecols[-1] - ecols[0] + 1))       # exactly as wide as the emblem
     g1, g2 = round(1.25 * INCH), round(0.5 * INCH)
     H = wm.shape[0] + g1 + eb.shape[0] + g2 + sl.shape[0]
     bone = np.zeros((H, W), bool)
@@ -476,26 +522,34 @@ def back_art(width_in=14.0):
     neon[y:y + en.shape[0], x:x + en.shape[1]] |= en
     emblem_box = (x, y, x + eb.shape[1], y + eb.shape[0])
     rects += [(x0 + x, y0 + y, x1 + x, y1 + y) for x0, y0, x1, y1 in e_rects]
+    ko = keep_out_mask((H, W), rects)
+    ko[emblem_box[1]:emblem_box[3], emblem_box[0]:emblem_box[2]] |= e_nocrack   # barbs stay whole
     y += eb.shape[0] + g2
     x = (W - sl.shape[1]) // 2
-    bone[y:y + sl.shape[0], x:x + sl.shape[1]] |= sl
-    ko = keep_out_mask((H, W), rects)
+    slogan = np.zeros((H, W), bool)
+    slogan[y:y + sl.shape[0], x:x + sl.shape[1]] = sl
+    # the slogan stays solid, like the hem code; the rest gets the cracked print
+    bone_c = crack(bone, ko, seed=11) | slogan
+    neon_c = crack(neon, ko, seed=12)
+    bone |= slogan
     # press-ready: no ink feature (barb tip, acute corner, crack sliver) under ~0.42 mm
-    bone_c = drop_specks(opening(crack(bone, ko, seed=11), 2.5))
-    neon_c = drop_specks(opening(crack(neon, ko, seed=12), 2.5))
-    return {"bone": bone_c, "neon": neon_c,
+    bone_c, neon_c, under = press_ready(opening(bone_c, 2.5), opening(neon_c, 2.5))
+    return {"bone": bone_c, "neon": neon_c, "under": under,
             "bone_raw": bone, "neon_raw": neon, "letters": letters, "wordmark_h": wm.shape[0],
             "emblem_box": emblem_box,
             "cap_wordmark_in": wm.shape[0] / INCH, "cap_slogan_in": sl.shape[0] / INCH}
 
 
 def hem_code(text="ASA-001 · EST. 2026"):
-    return {"bone": text_line(text, px(10), BARLOW_BOLD, tracking=0.10)}
+    (bone,), under = press_ready(text_line(text, px(10), BARLOW_BOLD, tracking=0.10), cracked=False)
+    return {"bone": bone, "under": under}
 
 
 def chest_art():
     bone, neon = chest_emblem(89)
-    return {"bone": bone, "neon": neon}
+    # the white underbase goes only under the flat pink; the bone is printed as puff
+    (neon,), under = press_ready(neon, cracked=False)
+    return {"bone": bone, "neon": neon, "under": under}
 
 
 # ---------------------------------------------------------------- output
@@ -506,6 +560,51 @@ def underbase(*plates, choke_mm=0.17):
     for p in plates:
         u |= p
     return drop_specks(opening(shrink(u, choke_mm * MM), 2.5))
+
+
+def press_ready(*tops, cracked=True):
+    """Despeckle the top colours, build the underbase, and drop any top-colour island
+    that would end up with no underbase under it (it would print dull or not hold).
+    Returns (tops..., underbase); with cracked=False returns ((tops,), underbase)."""
+    tops = [drop_specks(t, 1.0) for t in tops]
+    u = underbase(*tops)
+    clean = []
+    for t in tops:
+        lbl, n = ndimage.label(t)
+        if n:
+            has_u = ndimage.maximum(u, lbl, index=np.arange(1, n + 1))
+            keep = np.zeros(n + 1, bool)
+            keep[1:] = has_u > 0
+            t = t & keep[lbl]
+        clean.append(t)
+    if not cracked:
+        return tuple(clean), u
+    return (*clean, u)
+
+
+def register(plates, margin_in=0.25):
+    """Pad a set of plates with a margin and identical registration marks."""
+    m = round(margin_in * INCH)
+    h, w = plates[0].shape
+    H, W = h + 2 * m, w + 2 * m
+    marks = Image.new("L", (W, H), 0)
+    d = ImageDraw.Draw(marks)
+    r, lw = px(2.5), max(2, px(0.25))
+    for cx, cy in ((m // 2, m // 2), (W - m // 2, m // 2), (m // 2, H - m // 2), (W - m // 2, H - m // 2)):
+        d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=255, width=lw)
+        d.line((cx - r * 1.6, cy, cx + r * 1.6, cy), fill=255, width=lw)
+        d.line((cx, cy - r * 1.6, cx, cy + r * 1.6), fill=255, width=lw)
+    d.line((W // 2, m * 0.2, W // 2, m * 0.8), fill=255, width=lw)        # centre-line ticks
+    d.line((W // 2, H - m * 0.8, W // 2, H - m * 0.2), fill=255, width=lw)
+    d.line((m * 0.2, H // 2, m * 0.8, H // 2), fill=255, width=lw)
+    d.line((W - m * 0.8, H // 2, W - m * 0.2, H // 2), fill=255, width=lw)
+    mk = np.asarray(marks) > 0
+    out = []
+    for p in plates:
+        q = np.zeros((H, W), bool)
+        q[m:m + h, m:m + w] = p
+        out.append(q | mk)
+    return out
 
 
 def composite(plates):

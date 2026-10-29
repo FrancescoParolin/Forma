@@ -24,8 +24,9 @@ l'unico accento ed è usato solo su "ASA".
 ## File di stampa (`stampa/`)
 
 Lastre a 1 bit, 300 dpi, **nero = inchiostro su bianco** (positivo per pellicola).
-Le lastre di uno stesso set hanno la stessa tela: si mettono a registro
-allineando i bordi.
+Ogni lastra ha un margine di 0,25 in con segni di registro (mirini agli
+angoli e tacche sulle linee di centro), identici su tutte le lastre dello
+stesso set: servono solo per la pellicola, sul telaio vanno coperti.
 
 | Posizione | Misura          | Lastre                                                       | Tecnica            |
 |-----------|-----------------|--------------------------------------------------------------|--------------------|
@@ -46,13 +47,20 @@ chi indossa.
 - Puff del petto: tratto minimo 1,6 mm, spazio minimo 2,58 mm, niente punte
   sottili (le punte del filo sono barre arrotondate). Il rosa è piatto, a
   2,5 mm dal puff, con il suo sottofondo.
-- Crepe: celle da 4 a 10 mm, larghezza da 0,5 a 0,8 mm, circa 14,5% della
-  superficie crepabile. Crepano solo i tratti oltre 3,2 mm (wordmark, anello
-  esterno, bracci del mirino, ASA); filo, anello interno, tacche, puntini,
-  slogan e codice restano pieni. Nessuna crepa entro 3 mm dai ponti stencil.
-- Nessun dettaglio d'inchiostro sotto 0,42 mm e nessun frammento sotto 0,5 mm².
-- Ponti stencil al 10% dell'altezza delle maiuscole; spaziatura tra le lettere
-  più larga dei ponti, così i pezzi di P, R, O, E restano raggruppati.
+- Crepe: celle da 4 a 10 mm, larghezza da 0,5 a 0,8 mm (si stringono a
+  0,5 mm verso la fine, mai meno), circa 13% della superficie crepabile.
+  Crepano solo i tratti oltre 3,2 mm (wordmark, anello esterno, bracci del
+  mirino, ASA); filo, punte, anello interno, tacche, puntini, slogan e
+  codice restano pieni. Nessuna crepa entro 3 mm dai ponti stencil, nessun
+  trattino isolato o forellino.
+- Nessun dettaglio d'inchiostro sotto 0,42 mm, nessun frammento di colore
+  sotto 1 mm² e nessuna isola di colore senza sottofondo.
+- Ponti stencil del wordmark di 3,4 mm (8% delle maiuscole) con spazi tra le
+  lettere di 7 mm, così i pezzi di P, R, O, E restano raggruppati.
+- Filo spinato: due fili da 2,5 mm che si incrociano sopra/sotto, 16 punte
+  fatte di due fili tagliati in diagonale con un avvolgimento a spirale,
+  punte a circa 9 mm dal filo, taglio netto a ore 1.
+- Slogan largo esattamente quanto l'emblema (9,07 in), maiuscole 0,57 in.
 - Sottofondo bianco ristretto di 0,17 mm sotto i colori; nessun pixel fuori.
 
 ### Da decidere con lo stampatore

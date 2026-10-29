@@ -61,8 +61,10 @@ def washed_black(img, gm, seed):
     a = np.asarray(img, dtype=np.float32)
     rng = np.random.default_rng(seed)
     h, w = a.shape[:2]
-    n = Image.fromarray(rng.random((h // 90 + 2, w // 90 + 2)).astype(np.float32)).resize((w, h), Image.BICUBIC)
-    mott = (np.asarray(n, dtype=np.float32) - 0.5) * 9
+    mott = np.zeros((h, w), np.float32)
+    for cell, amp in ((90, 10), (35, 6)):            # garment-dye wash: blotches at two scales
+        n = Image.fromarray(rng.random((h // cell + 2, w // cell + 2)).astype(np.float32)).resize((w, h), Image.BICUBIC)
+        mott += (np.asarray(n, dtype=np.float32) - 0.5) * amp
     lum = a.mean(axis=2, keepdims=True)
     faded = 30 + a * 0.82 + mott[..., None]
     faded = faded * 0.85 + (lum * 0.82 + 30) * 0.15
@@ -204,25 +206,35 @@ front.save(f"{out}/mockup_fronte.jpg", quality=95)
 
 # close-ups at print resolution
 rgba = A.composite(backp)
-x_end = backp["letters"][4][1] + 60                       # whole "ASAPR", R included
-close_up(rgba.crop((0, 0, x_end, backp["wordmark_h"] + 450)), (x_end + 100, backp["wordmark_h"] + 550), 3).save(
-    f"{out}/dettaglio_retro_cracked.jpg", quality=93)
+# a deliberate "ASAPRO" crop: cut in the letter gap after the O, fabric margin elsewhere
+lt = backp["letters"]
+x_end = (lt[5][1] + lt[6][0]) // 2
+band = rgba.crop((0, 0, x_end, backp["wordmark_h"]))
+pad = 90
+framed = Image.new("RGBA", (band.width + pad, band.height + 2 * pad), (0, 0, 0, 0))
+framed.paste(band, (pad, pad))
+close_up(framed, framed.size, 3).save(f"{out}/dettaglio_retro_cracked.jpg", quality=93)
+# emblem crops run to the frame edge: the fabric never extends past the print window
 ex0, ey0, ex1, ey1 = backp["emblem_box"]
 cx, cy = (ex0 + ex1) // 2, (ey0 + ey1) // 2
-close_up(rgba.crop((cx - 900, cy - 900, cx + 900, cy + 400)), (1800, 1300), 6).save(f"{out}/dettaglio_mirino.jpg", quality=93)
-close_up(rgba.crop((ex1 - 900, ey0, ex1 + 60, ey0 + 900)), (1000, 940), 8).save(f"{out}/dettaglio_filo_spinato.jpg", quality=93)
+crop = rgba.crop((cx - 900, cy - 900, cx + 900, cy + 400))
+close_up(crop, crop.size, 6).save(f"{out}/dettaglio_mirino.jpg", quality=93)
+crop = rgba.crop((ex1 - 1000, ey0, ex1, ey0 + 1000))
+close_up(crop, crop.size, 8).save(f"{out}/dettaglio_filo_spinato.jpg", quality=93)
 close_up(puff_render(chest), (1400, 1400), 4).save(f"{out}/dettaglio_petto_puff.jpg", quality=93)
 close_up(A.composite(hem), (1600, 420), 7).save(f"{out}/dettaglio_codice_orlo.jpg", quality=93)
 
 # production files: 1-bit separations at 300 dpi + RGBA previews
-A.save_plate(backp["bone"], f"{out}/retro_1_bone.png")
-A.save_plate(backp["neon"], f"{out}/retro_2_rosa_806C.png")
-A.save_plate(A.underbase(backp["bone"], backp["neon"]), f"{out}/retro_0_sottofondo_bianco.png")
-A.save_plate(chest["bone"], f"{out}/petto_1_bone_puff.png")
-A.save_plate(chest["neon"], f"{out}/petto_2_rosa_806C_piatto.png")
-A.save_plate(A.underbase(chest["neon"]), f"{out}/petto_0_sottofondo_bianco_sotto_rosa.png")
-A.save_plate(hem["bone"], f"{out}/orlo_1_bone.png")
-A.save_plate(A.underbase(hem["bone"]), f"{out}/orlo_0_sottofondo_bianco.png")
+# each set shares one canvas with a 0.25 in margin and identical registration marks
+sets = {
+    "retro": [("0_sottofondo_bianco", backp["under"]), ("1_bone", backp["bone"]), ("2_rosa_806C", backp["neon"])],
+    "petto": [("0_sottofondo_bianco_sotto_rosa", chest["under"]), ("1_bone_puff", chest["bone"]),
+              ("2_rosa_806C_piatto", chest["neon"])],
+    "orlo": [("0_sottofondo_bianco", hem["under"]), ("1_bone", hem["bone"])],
+}
+for name, plates in sets.items():
+    for (suffix, _), plate in zip(plates, A.register([p for _, p in plates])):
+        A.save_plate(plate, f"{out}/{name}_{suffix}.png")
 A.composite(backp).save(f"{out}/anteprima_stampa_retro.png", dpi=(A.DPI, A.DPI))
 A.composite(chest).save(f"{out}/anteprima_stampa_petto.png", dpi=(A.DPI, A.DPI))
 A.composite(hem).save(f"{out}/anteprima_stampa_orlo.png", dpi=(A.DPI, A.DPI))
